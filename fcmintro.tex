@@ -59,7 +59,7 @@ Please use the 'starred' version of the \texttt{abstract} command for typesettin
 \abstract{Each chapter should be preceded by an abstract (no more than 200 words) that summarizes the content. The abstract will appear \textit{online} at \url{www.SpringerLink.com} and be available with unrestricted access. This allows unregistered users to read the abstract as a teaser for the complete chapter.\newline\indent
 Please use the 'starred' version of the \texttt{abstract} command for typesetting the text of the online abstracts (cf. source file of this chapter template \texttt{abstract}) and include them with the source files of your manuscript. Use the plain \texttt{abstract} command if the abstract is also to appear in the printed version of the book.}
 
-\section{Section Heading}
+\section{The birth of Fuzzy Cognitive Maps}
 \label{sec:1}
 Cognitive Maps (CM) are used in political analysis and decision making in international relations, foreign policy for a long time. The method was suggested by Robert Axelrod in his book~\cite{axelrod} in the late '70s. According to Bart Kosko's description in~\cite{b.kosko1986}, these maps are signed digraphs. Graphs, as algebraic structures have two components: nodes and edges. In CM, nodes represent variable concepts (eg. social instability) and the causal connections among these concepts are characterized by edges. The edges have a direction and a sign. If concept $A$ causally increases concept $B$, it is represented by an edge from $A$ to $B$ with positive sign. On the other hand, if $A$ reduces the value of $B$, the edge has a negative sign. Kosko illustrated CM with an example based on Henry Kissinger's essay ``Starting Out in the Direction of Middle East Peace'' published in \emph{Los Angeles Times} in 1982 (see Fig.~\ref{fig:kissingerCM}). Besides the graph, he also composed the adjacency matrix (Fig.~\ref{fig:kissingerMtx}) of the model. Only three different values can be found in this matrix, representing the causal relationship among concepts. If $w_{ij} = w(C_i, C_j)$ is 1, concept $C_1$ causally increases the value of $C_2$ (positive edges). On the contrary, if $C_1$ causally decreases the value of $C_2$, it is represented by $-1$ (negative edges), and the value 0 indicates the lack of causal connection.
 
@@ -78,6 +78,10 @@ Cognitive Maps (CM) are used in political analysis and decision making in intern
   \caption{The adjacency matrix of the CM based on Kissinger's essay.}
   \label{fig:kissingerMtx}
 \end{figure}
+
+It became quickly evident that the structure of a Cognitive Map imply too much limitations. The degree of causality, the levels of the causal effects (sometimes--often, little--much, etc.) cannot be expressed with the existing tool, and needs further development. Kosko introduced the Fuzzy Cognitive Map (FCM)~\cite{b.kosko1986}, where the edges may have several causality values and he also developed a fuzzy causal algebra for propagating causality in it.
+
+
 
 \section{Section Heading}
 \label{sec:2}
