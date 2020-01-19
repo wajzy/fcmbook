@@ -61,7 +61,7 @@ Please use the 'starred' version of the \texttt{abstract} command for typesettin
 
 \section{The birth of Fuzzy Cognitive Maps}
 \label{sec:1}
-Cognitive Maps (CM) are used in political analysis and decision making in international relations, foreign policy for a long time. The method was suggested by Robert Axelrod in his book~\cite{axelrod} in the late '70s. According to Bart Kosko's description in~\cite{b.kosko1986}, these maps are signed digraphs. Graphs, as algebraic structures have two components: nodes and edges. In CM, nodes represent variable concepts (eg. social instability) and the causal connections among these concepts are characterized by edges. The edges have a direction and a sign. If concept $A$ causally increases concept $B$, it is represented by an edge from $A$ to $B$ with positive sign. On the other hand, if $A$ reduces the value of $B$, the edge has a negative sign. Kosko illustrated CM with an example based on Henry Kissinger's essay ``Starting Out in the Direction of Middle East Peace'' published in \emph{Los Angeles Times} in 1982 (see Fig.~\ref{fig:kissingerCM}). Besides the graph, he also composed the adjacency matrix (Fig.~\ref{fig:kissingerMtx}) of the model. Only three different values can be found in this matrix, representing the causal relationship among concepts. If $w_{ij} = w(C_i, C_j)$ is 1, concept $C_1$ causally increases the value of $C_2$ (positive edges). On the contrary, if $C_1$ causally decreases the value of $C_2$, it is represented by $-1$ (negative edges), and the value 0 indicates the lack of causal connection.
+Cognitive Maps (CM) are used in political analysis and decision making in international relations, foreign policy for a long time. The method was suggested by Robert Axelrod in his book~\cite{axelrod} in the late '70s. According to Bart Kosko's description in~\cite{b.kosko1986}, these maps are signed digraphs. Graphs, as algebraic structures have two components: nodes and edges. In CM, nodes represent variable \emph{concepts} (eg. social instability) and the causal connections among these concepts are characterized by edges. The edges have a direction and a sign. If concept $A$ causally increases concept $B$, it is represented by an edge from $A$ to $B$ with positive sign. On the other hand, if $A$ reduces the value of $B$, the edge has a negative sign. Kosko illustrated CM with an example based on Henry Kissinger's essay ``Starting Out in the Direction of Middle East Peace'' published in \emph{Los Angeles Times} in 1982 (see Fig.~\ref{fig:kissingerCM}). Besides the graph, he also composed the adjacency matrix (Fig.~\ref{fig:kissingerMtx}) of the model. Only three different values can be found in this matrix, representing the causal relationship among concepts. If $w_{ij} = w(C_i, C_j)$ is 1, concept $C_1$ causally increases the value of $C_2$ (positive edges). On the contrary, if $C_1$ causally decreases the value of $C_2$, it is represented by $-1$ (negative edges), and the value 0 indicates the lack of causal connection.
 
 \begin{figure}[hbt]
   \begin{center}
@@ -81,24 +81,36 @@ Cognitive Maps (CM) are used in political analysis and decision making in intern
 
 It became quickly evident that the structure of a Cognitive Map imply too much limitations. The degree of causality, the levels of the causal effects (sometimes--often, little--much, etc.) cannot be expressed with the existing tool, and needs further development. Kosko introduced the Fuzzy Cognitive Map (FCM)~\cite{b.kosko1986}, where the edges may have several causality values and he also developed a fuzzy causal algebra for propagating causality in it.
 
-
-
-\section{Section Heading}
+\section{Simulations}
 \label{sec:2}
-% Always give a unique label
-% and use \ref{<label>} for cross-references
-% and \cite{<label>} for bibliographic references
-% use \sectionmark{}
-% to alter or adjust the section heading in the running head
-Instead of simply listing headings of different levels we recommend to let every heading be followed by at least a short passage of text.  Further on please use the \LaTeX\ automatism for all your cross-references and citations.
 
-Please note that the first line of text that follows a heading is not indented, whereas the first lines of all subsequent paragraphs are.
+The visual representation and formal description of models may help experts to review the structure of the studied system, but the real benefit of FCMs is the possibility of running simulations. Using a simple inference technique (see Eq.~\ref{eq:inference}), the next state of concepts (also called the \emph{activation values} of concepts, based on the similarity of FCMs and artificial neural networks) can be calculated using their current state and the weight of connections among them~\cite{dickerson1994virtual,tsadiras2008comparing}.
 
-Use the standard \verb|equation| environment to typeset your equations, e.g.
-%
 \begin{equation}
-a \times b = c\;,
+\label{eq:inference}
+A_{i}^{t+1} = f \left( \sum_{j=1}^{n} w_{ji}A_{j}^{t} \right)
 \end{equation}
+
+Here, $A_i$ is the activation value of concept $i$ at time step $t+1$, $n$ is the number of concepts and $f(.)$ is the \emph{threshold function}. Without this function, the activation values of concepts may exceed or fall below their allowed extreme values, which is in general $A_{i}^{t}\in[0, 1]$. Several threshold functions were published during the years, but the most widely applied one is the \emph{sigmoid} or \emph{logistics} function:
+
+\begin{equation}
+\label{eq:sigmoid}
+f(x) = \frac{1}{1+e^{-\lambda x}}
+\end{equation}
+
+where the $\lambda > 0$ specifies the steepness of the function. It's typical value is 5, but with greater values it approximates a binary function, the \emph{sign} function (Eq.~\ref{eq:sign}) better, which is also a popular choice.
+
+\begin{equation}
+\label{eq:sign}
+f(x) = \left\{
+\begin{array}{ll}
+1, & x>0, \\
+0, & x \leq 0 \\
+\end{array}
+\right.
+\end{equation}
+
+
 %
 however, for multiline equations we recommend to use the \verb|eqnarray| environment\footnote{In physics texts please activate the class option \texttt{vecphys} to depict your vectors in \textbf{\itshape boldface-italic} type - as is customary for a wide range of physical subjects}.
 \begin{eqnarray}
