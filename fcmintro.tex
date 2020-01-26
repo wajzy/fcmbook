@@ -61,7 +61,7 @@ Please use the 'starred' version of the \texttt{abstract} command for typesettin
 
 \section{The birth of Fuzzy Cognitive Maps}
 \label{sec:1}
-Cognitive Maps (CM) are used in political analysis and decision making in international relations, foreign policy for a long time. The method was suggested by Robert Axelrod in his book~\cite{axelrod} in the late '70s. According to Bart Kosko's description in~\cite{b.kosko1986}, these maps are signed digraphs. Graphs, as algebraic structures have two components: nodes and edges (arcs). In CM, nodes represent variable \emph{concepts} (eg. social instability) and the causal connections among these concepts are characterized by edges. The edges have a direction and a sign. If concept $A$ causally increases concept $B$, it is represented by an edge from $A$ to $B$ with positive sign. On the other hand, if $A$ reduces the value of $B$, the edge has a negative sign. Kosko illustrated CM with an example based on Henry Kissinger's essay ``Starting Out in the Direction of Middle East Peace'' published in \emph{Los Angeles Times} in 1982 (see Fig.~\ref{fig:kissingerCM}). Besides the graph, he also composed the adjacency (connection, weight) matrix (Fig.~\ref{fig:kissingerMtx}) of the model. Only three different values can be found in this matrix, representing the causal relationship among concepts. If $w_{ij} = w(C_i, C_j)$ is 1, concept $C_1$ causally increases the value of $C_2$ (positive edges). On the contrary, if $C_1$ causally decreases the value of $C_2$, it is represented by $-1$ (negative edges), and the value 0 indicates the lack of causal connection.
+Cognitive Maps (CM) are used in political analysis and decision making in international relations, foreign policy for a long time. The method was suggested by Robert Axelrod in his book \cite{axelrod} in the late '70s. According to Bart Kosko's description in \cite{b.kosko1986}, these maps are signed digraphs. Graphs, as algebraic structures have two components: nodes and edges (arcs). In CM, nodes represent variable \emph{concepts} (eg. social instability) and the causal connections among these concepts are characterized by edges. The edges have a direction and a sign. If concept $A$ causally increases concept $B$, it is represented by an edge from $A$ to $B$ with positive sign. On the other hand, if $A$ reduces the value of $B$, the edge has a negative sign. Kosko illustrated CM with an example based on Henry Kissinger's essay ``Starting Out in the Direction of Middle East Peace'' published in \emph{Los Angeles Times} in 1982 (see Fig.~\ref{fig:kissingerCM}). Besides the graph, he also composed the adjacency (connection, weight) matrix (Fig.~\ref{fig:kissingerMtx}) of the model. Only three different values can be found in this matrix, representing the causal relationship among concepts. If $w_{ij} = w(C_i, C_j)$ is 1, concept $C_1$ causally increases the value of $C_2$ (positive edges). On the contrary, if $C_1$ causally decreases the value of $C_2$, it is represented by $-1$ (negative edges), and the value 0 indicates the lack of causal connection.
 
 \begin{figure}[hbt]
   \begin{center}
@@ -79,12 +79,12 @@ Cognitive Maps (CM) are used in political analysis and decision making in intern
   \label{fig:kissingerMtx}
 \end{figure}
 
-It became quickly evident that the structure of a Cognitive Map imply too much limitations. The degree of causality, the levels of the causal effects (sometimes--often, little--much, etc.) cannot be expressed with the existing tool, and needs further development. Kosko introduced the Fuzzy Cognitive Map (FCM)~\cite{b.kosko1986}, where the edges may have several causality values. This way the original CM turned into a bipolar fuzzy graph~\cite{zhang1998yin}. Kosko also developed a fuzzy causal algebra for propagating causality in it, making the static analysis of the model possible. The concepts may affect other concepts indirectly because of the cyclic and non-feedforward structure of FCM.
+It became quickly evident that the structure of a Cognitive Map imply too much limitations. The degree of causality, the levels of the causal effects (sometimes--often, little--much, etc.) cannot be expressed with the existing tool, and needs further development. Kosko introduced the Fuzzy Cognitive Map (FCM) \cite{b.kosko1986}, where the edges may have several causality values. This way the original CM turned into a bipolar fuzzy graph \cite{zhang1998yin}. Kosko also developed a fuzzy causal algebra for propagating causality in it, making the static analysis of the model possible. The concepts may affect other concepts indirectly because of the cyclic and non-feedforward structure of FCM.
 
 \section{Simulations}
 \label{sec:2}
 
-The visual representation and formal description of models may help experts to review the structure of the studied system, but the real benefit of FCMs is the possibility of running simulations. This can be done by dynamic analysis~\cite{kosko1988hidden}. Using a simple inference technique (see Eq.~\ref{eq:inference}), the next state of concepts (also called the \emph{activation values} of concepts, based on the similarity of FCMs and artificial neural networks) can be calculated using their current state and the weight of connections among them~\cite{dickerson1994virtual,tsadiras2008comparing}. This way what-if analysis can be performed which is very useful for decision makers.
+The visual representation and formal description of models may help experts to review the structure of the studied system, but the real benefit of FCMs is the possibility of running simulations. This can be done by dynamic analysis \cite{kosko1988hidden}. Using a simple inference technique (see Eq.~\ref{eq:inference}), the next state of concepts (also called the \emph{activation values} of concepts, based on the similarity of FCMs and artificial neural networks) can be calculated using their current state and the weight of connections among them \cite{dickerson1994virtual,tsadiras2008comparing}. This way what-if analysis can be performed which is very useful for decision makers.
 
 \begin{equation}
 \label{eq:inference}
@@ -92,14 +92,21 @@ A_{i}^{t+1} = f \left( \sum_{j=1}^{n} w_{ji}A_{j}^{t} \right)
 \end{equation}
 %more inference rules: https://cran.r-project.org/web/packages/fcm/vignettes/vignettes.html
 
-Here, $A_i^{t+1}$ is the activation value of concept $i$ at time step $t+1$, $n$ is the number of concepts and $f(.)$ is the \emph{threshold} (transformation) function. Without this function, the activation values of concepts may exceed or fall below their allowed extreme values, which is in general $A_{i}\in[0, 1]$. Several threshold functions were published during the years, but the most widely applied one is the \emph{sigmoid} or \emph{logistics} function (Eq.~\ref{eq:sigmoid}):
+Here, $A_i^{t+1}$ is the activation value of concept $i$ at time step $t+1$, $n$ is the number of concepts and $f(\cdot)$ is the \emph{threshold} (transformation) function. Without this function, the activation values of concepts may exceed or fall below their allowed extreme values.
+
+\subsection{Threshold functions}
+
+In general, the activation values are in the $A_{i}\in[0, 1]$ interval. Several threshold functions were published during the years, but the most widely applied one is the \emph{sigmoid} or \emph{logistics} function (Eq.~\ref{eq:sigmoid}):
 
 \begin{equation}
 \label{eq:sigmoid}
 f_{\textrm{sigmoid}}(x) = \frac{1}{1+e^{-\lambda x}}
 \end{equation}
 
-where the $\lambda > 0$ specifies the steepness of the function. It's typical value is 5, but with greater values it approximates a binary function, with lower values a linear function (see Fig.~\ref{fig:lambdaSigmoid}).
+where the $\lambda > 0$ specifies the steepness of the function. It's typical value is 5. With greater values it approximates a binary function, with lower values a linear function (see Fig.~\ref{fig:lambdaSigmoid}). 
+
+\begin{backgroundinformation}{Choosing an appropriate $\lambda$ value}
+Is there an ``appropriate'' value of this parameter? According to Bueno and Salmeron \cite{buenoActivation}, the appropriate value should be found during an experimentation phase. As it was pointed out in \cite{hatwagnerm.f.koczyl.t.2015,parameterDependence}, the congergence speed and the final, stable values of concepts are heavily affected by the value of parameter $\lambda$ (see Fig.~\ref{fig:lambdaDependence}). Despite of the different results, different $\lambda$ values does not change the result of a simulation qualitatively, because the sigmoid function is strictly monotonically increasing. In practice, it is still worth to find an ``optimal'' value for $\lambda$, because sometimes the otherwise hardly different concept states may become distinguishable, and the order of concepts can be defined, if it is required. A possible method for ``lambda optimization'' is to maximize the standard deviation of final concept values (Fig.~\ref{fig:standardDeviation}) even by a quick local search algorithm, eg. the Golden Section Search.
 
 \begin{figure}[hbt]
   \begin{center}
@@ -109,10 +116,35 @@ where the $\lambda > 0$ specifies the steepness of the function. It's typical va
   \label{fig:lambdaSigmoid}
 \end{figure}
 
-%Bueno and Salmeron [2] suggestedthat appropriate value ofλ, used in sigmoid transformation function, be arrived duringexperimentation phase.
-%Bueno, S., Salmeron, J.: Benchmarking main activation functions in fuzzy cognitive maps.Expert Syst. Appl.36(3), 5221–5229 (2009)
+\begin{figure}[hbt]
+  \begin{center}
+    \includegraphics[scale=.9]{ascc2015plots/lambda.eps}
+  \end{center}
+  \caption{The final concept values of a Stakeholder Relationship Management System as function of parameter $\lambda$. $\lambda = 0.664$ maximized the standard deviation of concept values (marked with the thick vertical line).}
+  \label{fig:lambdaDependence}
+\end{figure}
 
-The \emph{sign} function (Eq.~\ref{eq:sign}) is also a popular choice, but because of the two available values, a concept can only be activated (1) or deactivated (0). 
+\begin{figure}[hbt]
+  \begin{center}
+    \includegraphics[scale=.9]{ascc2015plots/stdDev.eps}
+  \end{center}
+  \caption{Standard deviation of final concept values of a Stakeholder Relationship Management System calculated with different $\lambda$ values.}
+  \label{fig:standardDeviation}
+\end{figure}
+
+Even if the value of $\lambda$ can be considered ``optimal'', a scalar value is unable to unleash the full modeling potencial of an FCM. In an extreme case, every concept may have its own, specific $\lambda$ value, in order to get more realistic predictions. This way, the inference method defined by Eq.~\ref{eq:inference} can be re-written to Eq.~\ref{eq:inferenceMultilambda}, where $f_i$ represents the threshold function of concept $C_i$ that uses $\lambda_i$. This approach increases the number of model parameters, however. The benefits of using FCMs were their simple structure, which can be understood easily by stakeholders, experts of different fields, and the values (initial states of concepts, connection weights) can be matched to real values or effects in a straightforward way. The values of $\lambda$ do not have trivial connection with any real world objects, however, and their values can be set with trial and error technique or computationally. It also increases the required computational power of applications because it increases the number of model parameters. A good balance can be found if some concepts have their own parameters, the others share a common value.
+
+\begin{equation}
+\label{eq:inferenceMultilambda}
+A_{i}^{t+1} = f_i \left( \sum_{j=1}^{n} w_{ji}A_{j}^{t} \right)
+\end{equation}
+
+Concepts may be classified in three groups: if a concept influences the state of other concepts, but not affected by other concepts, it can be called an \emph{input} concept. Depending on the applied inference method, these concepts keep their initial values or their values can be sustained artificially (like ``sustained inputs'' in \cite{dickerson1994virtual}), therefore they do not need threshold function and parameter $\lambda$ neither. Another group of concepts is affected by other concepts but its elements do not influence the state of other concepts. In many applications, only these concepts are used for decision making, and they are called \emph{output} concepts. The remaining concepts are both affected by and they also affect other concepts, and are called \emph{intermediate} concepts \cite{boutalis2014system}.
+
+If all output concepts have specific $\lambda$ values, and intermediate concepts have a common $\lambda$, the complexity of the model remains moderate but its forecasting ability can be increased as it happened in \cite{hatwagner2018two}. If historical time series data are available, $\lambda$s can be optimized with eg. the Big Bang -- Big Crunch algorithm \cite{yesilenginurbasleon2010}.
+\end{backgroundinformation}
+
+The \emph{sign} function (Eq.~\ref{eq:sign}) is also a popular threshold function, but because of the two available values, a concept can only be activated (1) or deactivated (0). 
 
 \begin{equation}
 \label{eq:sign}
@@ -141,11 +173,11 @@ The $\lambda$ parameter can be used here as well, and has similar effect on the 
   \label{fig:lambdaHT}
 \end{figure}
 
-If only discrete states have to used, the \emph{trivalent} function (Eq.~\ref{eq:trivalent}) can be the solution. The value 1 expresses the increasing, the value $-1$ expresses the decreasing and 0 means the stable state of a concept.
+If only discrete states have to used, the \emph{trivalent} function (Eq.~\ref{eq:trivalent1}) can be the solution. The value 1 expresses the increasing, the value $-1$ expresses the decreasing and 0 means the stable state of a concept. A slightly modified version of this function can be found in \cite{yesil2014fcm} (Eq.~\ref{eq:trivalent2}).
 
 \begin{equation}
-\label{eq:trivalent}
-f_{\textrm{trivalent}}(x) = \left\{
+\label{eq:trivalent1}
+f_{\textrm{trivalent1}}(x) = \left\{
 \begin{array}{ll}
 1, & x>0, \\
 0, & x=0, \\
@@ -153,9 +185,25 @@ f_{\textrm{trivalent}}(x) = \left\{
 \end{array}
 \right.
 \end{equation}
-%FCM-GUI: A Graphical User Interface for BigBang-Big Crunch Learning of FCM
-%Engin Yesil, Leon Urbas and Anday Demirsoy
-%máshol vannak x határai
+
+\begin{equation}
+\label{eq:trivalent2}
+f_{\textrm{trivalent2}}(x) = \left\{
+\begin{array}{ll}
+1, & x \geq 0.5, \\
+0, & -0.5 < x < 0.5, \\
+-1,& x \leq -0.5. \\
+\end{array}
+\right.
+\end{equation}
+
+%Mik lehetnek a szimuláció kimenetelei?
+
+%A fejezet végén kellene egy formális leírás (4-tuple) az FCM-ről.
+
+%FCM típusok, self-loopok
+
+%Egy minta szimuláció bemutatása
 
 %however, for multiline equations we recommend to use the \verb|eqnarray| environment\footnote{In physics texts please activate the class option \texttt{vecphys} to depict your vectors in \textbf{\itshape boldface-italic} type - as is customary for a wide range of physical subjects}.
 %\begin{eqnarray}
