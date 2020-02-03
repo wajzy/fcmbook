@@ -88,9 +88,25 @@ The visual representation and formal description of models may help experts to r
 
 \begin{equation}
 \label{eq:inference}
-A_{i}^{t+1} = f \left( \sum_{j=1}^{n} w_{ji}A_{j}^{t} \right)
+A_{i}^{t+1} = f \left( \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}A_{j}^{t} \right)
 \end{equation}
 %more inference rules: https://cran.r-project.org/web/packages/fcm/vignettes/vignettes.html
+%Elpiniki's: \cite{papageorgioue.i.2011}
+%Recently, a rescaling has been suggested for the above tra-ditional FCM inference process to avoid the conflicts emerge incases where the initial values of concepts are 0 or 0.5 and espe-cially for the cases where there is no any information about aconcept-state or the physician does not know the initial state ofthe patient[33,34]. By this way, we overcome this problem and thenewrescaledinferenceprocessismorereliable,yieldingmoreexactand natural inference results than traditional FCMs. The proposedrescaling algorithm for FCM inference is presented inAppendix A
+%Kosko eredetije: \cite{dickerson1994virtual}
+% Módosított Kosko:
+\begin{equation}
+\label{eq:modKoskoInference}
+A_{i}^{t+1} = f \left( A_i^t + \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}A_{j}^{t} \right)
+\end{equation}
+
+
+\begin{equation}
+\label{eq:ElpinikiInference}
+A_{i}^{t+1} = f \left( (2A_i^t-1) + \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}\cdot(2A_j^t-1) \right)
+\end{equation}
+
+%Ide kellene még az FCM Type-... sajátosságok is!
 
 Here, $A_i^{t+1}$ is the activation value of concept $i$ at time step $t+1$, $n$ is the number of concepts and $f(\cdot)$ is the \emph{threshold} (transformation) function. Without this function, the activation values of concepts may exceed or fall below their allowed extreme values.
 
