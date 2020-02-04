@@ -61,6 +61,7 @@ Please use the 'starred' version of the \texttt{abstract} command for typesettin
 
 \section{The birth of Fuzzy Cognitive Maps}
 \label{sec:1}
+
 Cognitive Maps (CM) are used in political analysis and decision making in international relations, foreign policy for a long time. The method was suggested by Robert Axelrod in his book \cite{axelrod} in the late '70s. According to Bart Kosko's description in \cite{b.kosko1986}, these maps are signed digraphs. Graphs, as algebraic structures have two components: nodes and edges (arcs). In CM, nodes represent variable \emph{concepts} (eg. social instability) and the causal connections among these concepts are characterized by edges. The edges have a direction and a sign. If concept $A$ causally increases concept $B$, it is represented by an edge from $A$ to $B$ with positive sign. On the other hand, if $A$ reduces the value of $B$, the edge has a negative sign. Kosko illustrated CM with an example based on Henry Kissinger's essay ``Starting Out in the Direction of Middle East Peace'' published in \emph{Los Angeles Times} in 1982 (see Fig.~\ref{fig:kissingerCM}). Besides the graph, he also composed the adjacency (connection, weight) matrix (Fig.~\ref{fig:kissingerMtx}) of the model. Only three different values can be found in this matrix, representing the causal relationship among concepts. If $w_{ij} = w(C_i, C_j)$ is 1, concept $C_1$ causally increases the value of $C_2$ (positive edges). On the contrary, if $C_1$ causally decreases the value of $C_2$, it is represented by $-1$ (negative edges), and the value 0 indicates the lack of causal connection.
 
 \begin{figure}[hbt]
@@ -71,10 +72,9 @@ Cognitive Maps (CM) are used in political analysis and decision making in intern
   \label{fig:kissingerCM}
 \end{figure}
 
-
 \begin{figure}[hbt]
   \sidecaption
-  \includegraphics[scale=1]{kissingerMtx}
+  \includegraphics[scale=1.25]{kissingerMtx}
   \caption{The adjacency matrix of the CM based on Kissinger's essay.}
   \label{fig:kissingerMtx}
 \end{figure}
@@ -84,31 +84,44 @@ It became quickly evident that the structure of a Cognitive Map imply too much l
 \section{Simulations}
 \label{sec:2}
 
-The visual representation and formal description of models may help experts to review the structure of the studied system, but the real benefit of FCMs is the possibility of running simulations. This can be done by dynamic analysis \cite{kosko1988hidden}. Using a simple inference technique (see Eq.~\ref{eq:inference}), the next state of concepts (also called the \emph{activation values} of concepts, based on the similarity of FCMs and artificial neural networks) can be calculated using their current state and the weight of connections among them \cite{dickerson1994virtual,tsadiras2008comparing}. This way what-if analysis can be performed which is very useful for decision makers.
+The visual representation and formal description of models may help experts to review the structure of the studied system, but the real benefit of FCMs is the possibility of running simulations. This can be done by dynamic analysis \cite{kosko1988hidden}. Using a simple inference technique, the next state of concepts (also called the \emph{activation values} of concepts, based on the similarity of FCMs and artificial neural networks) can be calculated using their current state and the weight of connections among them \cite{dickerson1994virtual,tsadiras2008comparing}. This way what-if analysis can be performed which is very useful for decision makers.
+
+\subsection{Inference rules}
+
+Kosko defined the first, and still widely applied inference rule (Eq.~\ref{eq:Type1Inference}). In this case concepts are not allowed to directly influence themselves. With other words, a concept does not have ``memory'', technically speaking the edges must connect different concepts (i.e. self-loops are forbidden), but indirect feedbacks are still possible. Accordingly, the main diagonal of the connection matrix contains only zeros. These models are called FCMs of Type I (\cite{stylios1999mathematical}).
 
 \begin{equation}
-\label{eq:inference}
+\label{eq:Type1Inference}
 A_{i}^{t+1} = f \left( \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}A_{j}^{t} \right)
 \end{equation}
-%more inference rules: https://cran.r-project.org/web/packages/fcm/vignettes/vignettes.html
-%Elpiniki's: \cite{papageorgioue.i.2011}
-%Recently, a rescaling has been suggested for the above tra-ditional FCM inference process to avoid the conflicts emerge incases where the initial values of concepts are 0 or 0.5 and espe-cially for the cases where there is no any information about aconcept-state or the physician does not know the initial state ofthe patient[33,34]. By this way, we overcome this problem and thenewrescaledinferenceprocessismorereliable,yieldingmoreexactand natural inference results than traditional FCMs. The proposedrescaling algorithm for FCM inference is presented inAppendix A
-%Kosko eredetije: \cite{dickerson1994virtual}
-% Módosított Kosko:
+
+Here, $A_i^{t+1}$ is the activation value of concept $i$ at time step $t+1$, $n$ is the number of concepts and $f(\cdot)$ is the \emph{threshold} (transformation, squeezing) function. Without this function, the activation values of concepts may exceed or fall below their allowed extreme values.
+
+FCMs of Type III allow concepts to take into account their current states during the calculation of the next state, and apply the inference rule defined by Eq.~\ref{eq:Type3Inference}. In this case, the main diagonal of the connection matrix may contain nonzero values, which are often ones in practice.
+
 \begin{equation}
-\label{eq:modKoskoInference}
-A_{i}^{t+1} = f \left( A_i^t + \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}A_{j}^{t} \right)
+\label{eq:Type3Inference}
+A_{i}^{t+1} = f \left( w_{ii}A_i^t + \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}A_{j}^{t} \right)
 \end{equation}
 
+FCMs of Type II also have a one step memory, but the weight of self-loops ($k_1$) are the same for all concepts. Moreover, the influence coming from other concepts can be limited as well ($k_2$, see Eqs.~\ref{eq:Type2Inference}, \ref{eq:Type2k}). 
 
 \begin{equation}
-\label{eq:ElpinikiInference}
+\label{eq:Type2Inference}
+A_{i}^{t+1} = f \left( k_1 A_i^t + k_2 \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}A_{j}^{t} \right)
+\end{equation}
+
+\begin{equation}
+\label{eq:Type2k}
+0 < k_1, k_2 \leq 1
+\end{equation}
+
+Papageorgiu suggested the re-scale inference rule (Eq.~\ref{eq:rescaleInference}) in \cite{papageorgioue.i.2011}, because problems emerged in cases where the initial values of concepts were 0 or 0.5, assuming that the initial states are known at all. This modified inference rule yielded more reliable and natural results than other FCM versions.
+
+\begin{equation}
+\label{eq:rescaleInference}
 A_{i}^{t+1} = f \left( (2A_i^t-1) + \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}\cdot(2A_j^t-1) \right)
 \end{equation}
-
-%Ide kellene még az FCM Type-... sajátosságok is!
-
-Here, $A_i^{t+1}$ is the activation value of concept $i$ at time step $t+1$, $n$ is the number of concepts and $f(\cdot)$ is the \emph{threshold} (transformation) function. Without this function, the activation values of concepts may exceed or fall below their allowed extreme values.
 
 \subsection{Threshold functions}
 
@@ -148,7 +161,7 @@ Is there an ``appropriate'' value of this parameter? According to Bueno and Salm
   \label{fig:standardDeviation}
 \end{figure}
 
-Even if the value of $\lambda$ can be considered ``optimal'', a scalar value is unable to unleash the full modeling potencial of an FCM. In an extreme case, every concept may have its own, specific $\lambda$ value, in order to get more realistic predictions. This way, the inference method defined by Eq.~\ref{eq:inference} can be re-written to Eq.~\ref{eq:inferenceMultilambda}, where $f_i$ represents the threshold function of concept $C_i$ that uses $\lambda_i$. This approach increases the number of model parameters, however. The benefits of using FCMs were their simple structure, which can be understood easily by stakeholders, experts of different fields, and the values (initial states of concepts, connection weights) can be matched to real values or effects in a straightforward way. The values of $\lambda$ do not have trivial connection with any real world objects, however, and their values can be set with trial and error technique or computationally. It also increases the required computational power of applications because it increases the number of model parameters. A good balance can be found if some concepts have their own parameters, the others share a common value.
+Even if the value of $\lambda$ can be considered ``optimal'', a scalar value is unable to unleash the full modeling potencial of an FCM. In an extreme case, every concept may have its own, specific $\lambda$ value, in order to get more realistic predictions. This way, the inference rule defined by Eq.~\ref{eq:Type1Inference} can be re-written to Eq.~\ref{eq:inferenceMultilambda}, where $f_i$ represents the threshold function of concept $C_i$ that uses $\lambda_i$. This approach increases the number of model parameters, however. The benefits of using FCMs were their simple structure, which can be understood easily by stakeholders, experts of different fields, and the values (initial states of concepts, connection weights) can be matched to real values or effects in a straightforward way. The values of $\lambda$ do not have trivial connection with any real world objects, however, and their values can be set with trial and error technique or computationally. It also increases the required computational power of applications because it increases the number of model parameters. A good balance can be found if some concepts have their own parameters, the others share a common value.
 
 \begin{equation}
 \label{eq:inferenceMultilambda}
@@ -213,11 +226,14 @@ f_{\textrm{trivalent2}}(x) = \left\{
 \right.
 \end{equation}
 
-%Mik lehetnek a szimuláció kimenetelei?
+%Mik lehetnek a szimuláció kimenetelei? Type III nagy valószínűséggel kerül határciklusba vagy lesz instabil. \cite{martchenko2003investigating} --> meghatározták a stabilitás feltételét, mely csak a kapcsolati mátrixtól függ. \cite{tsadiras2008comparing} --> binary and trivalent FCMs can reach an equilibrium/fixed point or limit cycle, but only continuous state FCMs may behave chaotically.
+
+%\begin{equation}
+%\label{eq:fixedPoint}
+%\exists t_0 \in \mathbb{N} : A_i^{t+1} = A_i^t, \forall t \geq t_0, i=1, \dots, n
+%\end{equation}
 
 %A fejezet végén kellene egy formális leírás (4-tuple) az FCM-ről.
-
-%FCM típusok, self-loopok
 
 %Egy minta szimuláció bemutatása
 
