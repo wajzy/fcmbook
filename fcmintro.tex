@@ -88,7 +88,7 @@ The visual representation and formal description of models may help experts to r
 
 \subsection{Inference rules}
 
-Kosko defined the first, and still widely applied inference rule (Eq.~\ref{eq:Type1Inference}). In this case concepts are not allowed to directly influence themselves. With other words, a concept does not have ``memory'', technically speaking the edges must connect different concepts (i.e. self-loops are forbidden), but indirect feedbacks are still possible. Accordingly, the main diagonal of the connection matrix contains only zeros. These models are called FCMs of Type I (\cite{stylios1999mathematical}).
+Kosko defined the first, and still widely applied inference rule (Eq.~\ref{eq:Type1Inference}). In this case concepts are not allowed to directly influence themselves. With other words, a concept does not have ``memory'', technically speaking the edges must connect different concepts (i.e. self-loops are forbidden), but indirect feedbacks are still possible. Accordingly, the main diagonal of the connection matrix contains only zeros. These models are called FCMs of Type I \cite{stylios1999mathematical}.
 
 \begin{equation}
 \label{eq:Type1Inference}
@@ -226,12 +226,56 @@ f_{\textrm{trivalent2}}(x) = \left\{
 \right.
 \end{equation}
 
-%Mik lehetnek a szimuláció kimenetelei? Type III nagy valószínűséggel kerül határciklusba vagy lesz instabil. \cite{martchenko2003investigating} --> meghatározták a stabilitás feltételét, mely csak a kapcsolati mátrixtól függ. \cite{tsadiras2008comparing} --> binary and trivalent FCMs can reach an equilibrium/fixed point or limit cycle, but only continuous state FCMs may behave chaotically.
+\subsection{Simulation outcomes}
 
-%\begin{equation}
-%\label{eq:fixedPoint}
-%\exists t_0 \in \mathbb{N} : A_i^{t+1} = A_i^t, \forall t \geq t_0, i=1, \dots, n
-%\end{equation}
+During simulations, the states of concepts continuously evolve, until one of the three possible outcomes happens \cite{tsadiras2008comparing}:
+
+\begin{enumerate}
+  \item In most cases, the activation values converge very quickly to a stable state (equilibrium point, see Eq.~\ref{eq:fixedPoint}). These states are also called \emph{fixed points} (FPs). Depending on the connection matrix, initial state, inference rule, threshold function and its $\lambda$ parameter (if applied), a model may have multiple FPs.
+  
+  \begin{equation}
+  \label{eq:fixedPoint}
+  \exists t_{\textbf{FP}} \in \mathbb{N} : A_i^{t+1} = A_i^t, \forall t \geq t_{\textbf{FP}}, i=1, \dots, m
+  \end{equation}
+  
+  \item Sometimes the system enters a \emph{limit cycle} (LC). In these cases after several time steps, a $T$ steps long sequence of state vectors starts to repeat (see Eq.~\ref{eq:limitCycle}).
+  
+  \begin{equation}
+  \label{eq:limitCycle}
+  \exists t_{\textbf{LC}}, T \in \mathbb{N} : A_i^{t+T} = A_i^t, \forall t \geq t_{\textbf{LC}}, i=1, \dots, m
+  \end{equation}
+  
+  \item The system never stabilizes, behaves chaotically.
+\end{enumerate}
+
+It's easy to prove that bivalent and trivalent systems cannot behave chaotically. The process of simulations are deterministic, and the number of different state vectors is $2^N$ or $3^N$, respectively, where $N$ is the number of concepts. According to this, if the system is unstable, its states are going to repeat after $2^N$ or $3^N$ time steps, or earlier. FPs and LCs are related to the hidden patterns described in Kosko's work \cite{kosko1988hidden}.
+
+In contrast, continuous state FCMs may enter practically infinite different states, thus chaotic behavior is possible. It happens especially often in case of Type III FCMs, which enter LCs frequently as well \cite{martchenko2003investigating}. Martchenko et al. also defined the condition of stability, too, which depends on the connection matrix.
+
+Harmati et al. went further \cite{harmati2018existenceFCM} and determined the conditions of convergence and the number of FPs. According to their results, if the FCM uses sigmoid threshold function and the inequality
+
+\begin{equation}
+\label{eq:oneFPsigmoid}
+||W||_F < \frac{4}{\lambda}
+\end{equation}
+
+holds, then the FCM has exactly one FP, without any LCs or chaotic patterns. Here $W$ is the connection matrix, $||\cdot||_F$ is the Frobenius-norm of the matrix defined by Eq.~\ref{eq:Frobenius}, and $\lambda$ is the steepness of the threshold function.
+
+\begin{equation}
+\label{eq:Frobenius}
+||W||_F = \left( \sum_i \sum_j w_{ij}^2 \right)^{1/2}
+\end{equation}
+
+Similarly, if the hyperbolic tangent function is applied and Eq.~\ref{eq:oneFPhypTan} holds, the FCM has one and only one FP. These theorems are valid even if the connection matrix contains direct feedbacks.
+
+\begin{equation}
+\label{eq:oneFPhypTan}
+||W||_F < \frac{1}{\lambda}
+\end{equation}
+
+Moreover, if the sigmoid or hyperbolic tangent threshold functions are used, and $W$ contains only non-negative elements than the FCM has FP, regardless of the value of $\lambda$. Similar contexts were also explored in case of some extended versions of FCM, the Grey FCMs \cite{harmati2018convergenceGFCM} and Fuzzy Set Valued Sigmoid FCMs \cite{harmati2018existenceFSVFCM}.
+
+These are remarkable achievements because some of the behavioral properties of an FCM can be revealed without executing an exhaustive set of simulations, which is computationally very intensive. Unfortunately it is often unavoidable. If the model is made by experts, it may contain many subjective elements, eg. it is really hard to define the exact weight of a relationship. Even a small difference in the weights may lead to different behaviour, however. It is worth investigate the effect of small model modifications on behavioural properties, but it means a huge job which must be automated like in \cite{hatwagner2019banking,hatwagner2018improved}. The search space is huge for an exhaustive search hence Bacterial Evolutionary Algorithm \cite{nawa1998bacterial} was applied to generate and analyse the behavioral difference caused by slightly modified model versions and $\lambda$ values. If modified models with significantly different dynamic behaviour are found, experts are suggested to consider some changes on the model.
 
 %A fejezet végén kellene egy formális leírás (4-tuple) az FCM-ről.
 
