@@ -277,6 +277,32 @@ Moreover, if the sigmoid or hyperbolic tangent threshold functions are used, and
 
 These are remarkable achievements because some of the behavioral properties of an FCM can be revealed without executing an exhaustive set of simulations, which is computationally very intensive. Unfortunately it is often unavoidable. If the model is made by experts, it may contain many subjective elements, eg. it is really hard to define the exact weight of a relationship. Even a small difference in the weights may lead to different behaviour, however. It is worth investigate the effect of small model modifications on behavioural properties, but it means a huge job which must be automated like in \cite{hatwagner2019banking,hatwagner2018improved}. The search space is huge for an exhaustive search hence Bacterial Evolutionary Algorithm \cite{nawa1998bacterial} was applied to generate and analyse the behavioral difference caused by slightly modified model versions and $\lambda$ values. If modified models with significantly different dynamic behaviour are found, experts are suggested to consider some changes on the model.
 
+\subsection{An example simulation}
+
+\begin{table}[!t]
+\caption{Connection matrix of the example FCM.}
+\label{tab:exampleConnMtx}
+\begin{tabular}{p{2cm}p{2.4cm}p{2cm}p{4.9cm}}
+\hline\noalign{\smallskip}
+Classes & Subclass & Length & Action Mechanism  \\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+Translation & mRNA$^a$  & 22 (19--25) & Translation repression, mRNA cleavage\\
+Translation & mRNA cleavage & 21 & mRNA cleavage\\
+Translation & mRNA  & 21--22 & mRNA cleavage\\
+Translation & mRNA  & 24--26 & Histone and DNA Modification\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+\end{tabular}
+$^a$ Table foot note (with superscript)
+\end{table}
+
+
+\begin{figure}[hbt]
+  \sidecaption
+  \includegraphics[scale=0.5]{simulation/graph.pdf}
+  \caption{Graphical representation of the example FCM.}
+  \label{fig:exampleGraph}
+\end{figure}
+
 %A fejezet végén kellene egy formális leírás (4-tuple) az FCM-ről.
 
 %Egy minta szimuláció bemutatása

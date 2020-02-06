@@ -1,0 +1,17 @@
+digraph FCM {
+  c1 [label=<C<SUB>1</SUB>>];
+  c2 [label=<C<SUB>2</SUB>>]; 
+  c3 [label=<C<SUB>3</SUB>>]; 
+  c4 [label=<C<SUB>4</SUB>>]; 
+  c5 [label=<C<SUB>5</SUB>>];
+  
+  c1 -> c2 [label="0.5"];
+  c1 -> c3 [label="0.3"];
+  c2 -> c4 [label="-0.1"];
+  c2 -> c5 [label="0.35"];
+  c3 -> c2 [label="-0.1"];
+  c3 -> c4 [label="-0.2"];
+  c3 -> c5 [label="0.4"];
+  c4 -> c1 [label="0.4"];
+  c5 -> c1 [label="-0.7"];
+}
