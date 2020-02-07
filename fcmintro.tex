@@ -279,28 +279,57 @@ These are remarkable achievements because some of the behavioral properties of a
 
 \subsection{An example simulation}
 
+Finally, an example FCM is given for illustration. The model has 5 concepts, their allowed values are in the interval [0,~1]. Kosko's original inference rule is applied (Eq.~\ref{eq:Type1Inference}), the threshold function is the sigmoid type (Eq.~\ref{eq:sigmoid}) with parameter $\lambda = 5$. These are very general settings, and according to this, the dynamic behavior of the model is also very typical: the concepts' values converge after some time steps to their final values, to an equilibrium point.
+
 \begin{table}[!t]
 \caption{Connection matrix of the example FCM.}
 \label{tab:exampleConnMtx}
-\begin{tabular}{p{2cm}p{2.4cm}p{2cm}p{4.9cm}}
+\begin{tabular}{p{1cm}|p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
 \hline\noalign{\smallskip}
-Classes & Subclass & Length & Action Mechanism  \\
+ & $C_1$ & $C_2$ & $C_3$ & $C_4$ & $C_5$ \\
 \noalign{\smallskip}\svhline\noalign{\smallskip}
-Translation & mRNA$^a$  & 22 (19--25) & Translation repression, mRNA cleavage\\
-Translation & mRNA cleavage & 21 & mRNA cleavage\\
-Translation & mRNA  & 21--22 & mRNA cleavage\\
-Translation & mRNA  & 24--26 & Histone and DNA Modification\\
+$C_1$ & 0 & 0.5 & 0.3 & 0 & 0 \\
+$C_2$ & 0 & 0 & 0 & $-0.1$ & 0.35 \\
+$C_3$ & 0 & $-0.1$ & 0 & $-0.2$ & 0.4 \\
+$C_4$ & 0.4 & 0 & 0 & 0 & 0 \\
+$C_5$ & $-0.7$ & 0 & 0 & 0 & 0 \\
 \noalign{\smallskip}\hline\noalign{\smallskip}
 \end{tabular}
-$^a$ Table foot note (with superscript)
 \end{table}
 
+\begin{table}[!t]
+\caption{State vectors of the example FCM.}
+\label{tab:exampleStates}
+\begin{tabular}{p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}p{1cm}}
+\hline\noalign{\smallskip}
+Time & $C_1$ & $C_2$ & $C_3$ & $C_4$ & $C_5$ \\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+$t_0$ & 0.00 & 0.50 & 1.00 & 0.50 & 0.00 \\
+$t_1$ & 0.94 & 0.44 & 0.32 & 0.50 & 0.50 \\
+$t_2$ & 0.83 & 0.65 & 0.57 & 0.87 & 0.04 \\
+$t_3$ & 0.92 & 0.41 & 0.25 & 0.84 & 0.05 \\
+$t_4$ & 0.80 & 0.42 & 0.28 & 0.86 & 0.04 \\
+$t_5$ & 0.81 & 0.41 & 0.27 & 0.83 & 0.06 \\
+$t_6$ & 0.81 & 0.42 & 0.28 & 0.84 & 0.05 \\
+$t_7$ & 0.81 & 0.42 & 0.28 & 0.83 & 0.06 \\
+$t_8$ & 0.81 & 0.42 & 0.28 & 0.84 & 0.05 \\
+$t_9$ & 0.81 & 0.42 & 0.28 & 0.84 & 0.05 \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+\end{tabular}
+\end{table}
 
 \begin{figure}[hbt]
   \sidecaption
   \includegraphics[scale=0.5]{simulation/graph.pdf}
   \caption{Graphical representation of the example FCM.}
   \label{fig:exampleGraph}
+\end{figure}
+
+\begin{figure}[hbt]
+  \sidecaption
+  \includegraphics[scale=0.55]{simulation/simulation.eps}
+  \caption{Convergence of concept activations during simulation.}
+  \label{fig:exampleConvergence}
 \end{figure}
 
 %A fejezet végén kellene egy formális leírás (4-tuple) az FCM-ről.
