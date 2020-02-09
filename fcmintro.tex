@@ -125,7 +125,7 @@ A_{i}^{t+1} = f \left( (2A_i^t-1) + \sum_{\substack{j=1\\j \ne i}}^{n} w_{ji}\cd
 
 \subsection{Threshold functions}
 
-In general, the activation values are in the $A_{i}\in[0, 1]$ interval. Several threshold functions were published during the years, but the most widely applied one is the \emph{sigmoid} or \emph{logistics} function (Eq.~\ref{eq:sigmoid}):
+In general, the activation values are in the $A_{i}\in[0, 1]$ interval. Several threshold functions were published during the years, but the most widely applied one is the \emph{sigmoid} (\emph{logistics}) function (Eq.~\ref{eq:sigmoid}):
 
 \begin{equation}
 \label{eq:sigmoid}
@@ -161,7 +161,7 @@ Is there an ``appropriate'' value of this parameter? According to Bueno and Salm
   \label{fig:standardDeviation}
 \end{figure}
 
-Even if the value of $\lambda$ can be considered ``optimal'', a scalar value is unable to unleash the full modeling potencial of an FCM. In an extreme case, every concept may have its own, specific $\lambda$ value, in order to get more realistic predictions. This way, the inference rule defined by Eq.~\ref{eq:Type1Inference} can be re-written to Eq.~\ref{eq:inferenceMultilambda}, where $f_i$ represents the threshold function of concept $C_i$ that uses $\lambda_i$. This approach increases the number of model parameters, however. The benefits of using FCMs were their simple structure, which can be understood easily by stakeholders, experts of different fields, and the values (initial states of concepts, connection weights) can be matched to real values or effects in a straightforward way. The values of $\lambda$ do not have trivial connection with any real world objects, however, and their values can be set with trial and error technique or computationally. It also increases the required computational power of applications because it increases the number of model parameters. A good balance can be found if some concepts have their own parameters, the others share a common value.
+Even if the value of $\lambda$ can be considered ``optimal'', a scalar value is unable to unleash the full modeling potencial of an FCM. In an extreme case, every concept may have its own, specific $\lambda$ value, in order to get more realistic predictions. This way, the inference rule defined by Eq.~\ref{eq:Type1Inference} can be re-written to Eq.~\ref{eq:inferenceMultilambda}, where $f_i$ represents the threshold function of concept $C_i$ that uses $\lambda_i$. This approach increases the number of model parameters, however. One of the benefits of using FCM was its simple structure, which can be understood easily by stakeholders, experts of different fields, and the values (initial states of concepts, connection weights) can be matched to real values or effects in a straightforward way. The values of $\lambda$ do not have trivial connection with any real world objects, however, and their values can be set with trial and error technique or computationally. It also increases the required computational power of applications because it increases the number of model parameters. A good balance can be found if some concepts have their own parameters, the others share a common value.
 
 \begin{equation}
 \label{eq:inferenceMultilambda}
@@ -235,20 +235,20 @@ During simulations, the states of concepts continuously evolve, until one of the
   
   \begin{equation}
   \label{eq:fixedPoint}
-  \exists t_{\textbf{FP}} \in \mathbb{N} : A_i^{t+1} = A_i^t, \forall t \geq t_{\textbf{FP}}, i=1, \dots, m
+  \exists t_{\textbf{FP}} \in \mathbb{N} : A_i^{t+1} = A_i^t, \forall t \geq t_{\textbf{FP}}, i=1, \dots, n
   \end{equation}
   
   \item Sometimes the system enters a \emph{limit cycle} (LC). In these cases after several time steps, a $T$ steps long sequence of state vectors starts to repeat (see Eq.~\ref{eq:limitCycle}).
   
   \begin{equation}
   \label{eq:limitCycle}
-  \exists t_{\textbf{LC}}, T \in \mathbb{N} : A_i^{t+T} = A_i^t, \forall t \geq t_{\textbf{LC}}, i=1, \dots, m
+  \exists t_{\textbf{LC}}, T \in \mathbb{N} : A_i^{t+T} = A_i^t, \forall t \geq t_{\textbf{LC}}, i=1, \dots, n
   \end{equation}
   
   \item The system never stabilizes, behaves chaotically.
 \end{enumerate}
 
-It's easy to prove that bivalent and trivalent systems cannot behave chaotically. The process of simulations are deterministic, and the number of different state vectors is $2^N$ or $3^N$, respectively, where $N$ is the number of concepts. According to this, if the system is unstable, its states are going to repeat after $2^N$ or $3^N$ time steps, or earlier. FPs and LCs are related to the hidden patterns described in Kosko's work \cite{kosko1988hidden}.
+It's easy to prove that bivalent and trivalent systems cannot behave chaotically. The process of simulations are deterministic, and the number of different state vectors is $2^n$ or $3^n$, respectively, where $n$ is the number of concepts. According to this, if the system is unstable, its states are going to repeat after $2^n$ or $3^n$ time steps, or earlier. FPs and LCs are related to the hidden patterns described in Kosko's work \cite{kosko1988hidden}.
 
 In contrast, continuous state FCMs may enter practically infinite different states, thus chaotic behavior is possible. It happens especially often in case of Type III FCMs, which enter LCs frequently as well \cite{martchenko2003investigating}. Martchenko et al. also defined the condition of stability, too, which depends on the connection matrix.
 
@@ -277,9 +277,15 @@ Moreover, if the sigmoid or hyperbolic tangent threshold functions are used, and
 
 These are remarkable achievements because some of the behavioral properties of an FCM can be revealed without executing an exhaustive set of simulations, which is computationally very intensive. Unfortunately it is often unavoidable. If the model is made by experts, it may contain many subjective elements, eg. it is really hard to define the exact weight of a relationship. Even a small difference in the weights may lead to different behaviour, however. It is worth investigate the effect of small model modifications on behavioural properties, but it means a huge job which must be automated like in \cite{hatwagner2019banking,hatwagner2018improved}. The search space is huge for an exhaustive search hence Bacterial Evolutionary Algorithm \cite{nawa1998bacterial} was applied to generate and analyse the behavioral difference caused by slightly modified model versions and $\lambda$ values. If modified models with significantly different dynamic behaviour are found, experts are suggested to consider some changes on the model.
 
+In most decision making tasks, stable states are the desired results. In these cases the future state of a system can be determined, and if that equilibrium state is undesirable, measures can be taken. There are some situations however, eg. time series predictions \cite{homenda2014modeling,homenda2017clustering,lu2014modeling}, when LCs or chaotic behavior seems very useful. Often extended versions of the original FCM are suggested to get better predictions.
+
 \subsection{An example simulation}
 
-Finally, an example FCM is given for illustration. The model has 5 concepts, their allowed values are in the interval [0,~1]. Kosko's original inference rule is applied (Eq.~\ref{eq:Type1Inference}), the threshold function is the sigmoid type (Eq.~\ref{eq:sigmoid}) with parameter $\lambda = 5$. These are very general settings, and according to this, the dynamic behavior of the model is also very typical: the concepts' values converge after some time steps to their final values, to an equilibrium point.
+Finally, an example FCM is given for illustration. The model has 5 concepts, their allowed values are in the interval [0,~1]. Kosko's original inference rule is applied (Eq.~\ref{eq:Type1Inference}), the threshold function is the sigmoid type (Eq.~\ref{eq:sigmoid}) with parameter $\lambda = 5$.
+
+Formally, this model can be defined by a 4-tuple $(C, W, A, f)$, where $C = C_1, C_2,\dots, C_n$ is the set of $n=5$ concepts, function $W : (C_i,~C_j) \to w_{ij}$ associates the causal value $w_{ij} \in [-1,~+1]$ to each pair of concepts $(C_i,~C_j)$. These weights of directed edges are collected in the connection matrix denoted by $W_{nxn}$. Another function, $A : (C_i) \to A_i$ associates the activation value $A_i \in \mathbb{R}$ to each node $C_i$ at each time step $t = 1, 2,\dots, m$. The (sigmoid) threshold function $f : \mathbb{R} \to [0,~1]$ forces the activation values in their allowed range.
+
+These are very general settings, and according to this, the dynamic behavior of the model is also very typical: the concepts' values converge after some time steps to their final values, to an equilibrium point.
 
 \begin{table}[!t]
 \caption{Connection matrix of the example FCM.}
@@ -332,9 +338,12 @@ $t_9$ & 0.81 & 0.42 & 0.28 & 0.84 & 0.05 \\
   \label{fig:exampleConvergence}
 \end{figure}
 
-%A fejezet végén kellene egy formális leírás (4-tuple) az FCM-ről.
+\section{Creating a Fuzzy Cognitive Map model}
 
-%Egy minta szimuláció bemutatása
+% \cite{kosko1988hidden} --> Szakértők, minél több, annál jobb, credibility weight, differential Hebbian learning
+% \cite{papageorgiou2012learning} --> csak a gépi tanulási algoritmusokkal foglalkozik, jó összefoglaló
+
+% fcm modellalkotás, tanulás, modellredukció
 
 %however, for multiline equations we recommend to use the \verb|eqnarray| environment\footnote{In physics texts please activate the class option \texttt{vecphys} to depict your vectors in \textbf{\itshape boldface-italic} type - as is customary for a wide range of physical subjects}.
 %\begin{eqnarray}
