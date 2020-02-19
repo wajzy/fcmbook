@@ -1,0 +1,70 @@
+%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for your "contribution" to a contributed volume
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[graybox]{svmult}
+
+\usepackage[utf8]{inputenc}
+
+% choose options for [] as required from the list
+% in the Reference Guide
+
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+%
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+
+\usepackage{newtxtext}       % 
+\usepackage{newtxmath}       % selects Times Roman as basic font
+
+% see the list of further useful packages
+% in the Reference Guide
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with
+                       % your makeindex program
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title*{Concept Reduction Methods}
+% Use \titlerunning{Short Title} for an abbreviated version of
+% your contribution title if the original one is too long
+\author{Miklós F. Hatwagner}
+% Use \authorrunning{Short Title} for an abbreviated version of
+% your contribution title if the original one is too long
+\institute{Miklós F. Hatwagner \at Széchenyi István University, Győr, Hungary \email{miklos.hatwagner@sze.hu}}
+%
+% Use the package "url.sty" to avoid
+% problems with special characters
+% used in your e-mail or web address
+%
+\maketitle
+
+\abstract*{<To be prepared>}
+
+\abstract{<To be prepared>}
+
+\section{The Motivating Problem}
+\label{sec:1}
+
+The title of Adrienn Buruzs's PhD thesis \cite{buruzsphd2015} is ``Evaluation of Sustainable Regional Waste Management Systems with Fuzzy Cognitive Map''. As the title suggests, she analyzed the internal driving forces, dynamic behavior and sustainability of Integrated Waste Management Systems (IWMSs), which are very complex systems including many aspects (environmental, economic, social, institutional, legal and technical) and stakeholders. Even at an early stage of her investigations became apparent that Fuzzy Cognitive Maps (FCMs) are appropriate tools to describe the large number of interacting and coupled entities and it copes with the inherent uncertainties of the system. At first, she created a new FCM model \cite{buruzs2013developing}, which contains six main factors. These factors were identified on the basis of the literature and represented by the concepts of the FCM. The strength of relationships among concepts were defined by the results of a survey filled out by 75 stakeholders. The simulation results provided by FCM were validated later in \cite{buruzs2013advanced}. Time series data were collected based on the relevant literature and it served as the input of a Bacterial Evolutionary Algorithm to learn the connection weights among the already specified concepts. The goal of optimization was to find an FCM that generates as similar time series as possible. Unfortunately, a strong contradiction was explored between the models created by experts and machine learning. 
+
+\begin{acknowledgement}
+If you want to include acknowledgments of assistance and the like at the end of an individual chapter please use the \verb|acknowledgement| environment -- it will automatically be rendered in line with the preferred layout.
+\end{acknowledgement}
+
+\input{references}
+\end{document}
