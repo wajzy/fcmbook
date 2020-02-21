@@ -60,7 +60,36 @@
 \section{The Motivating Problem}
 \label{sec:1}
 
-The title of Adrienn Buruzs's PhD thesis \cite{buruzsphd2015} is ``Evaluation of Sustainable Regional Waste Management Systems with Fuzzy Cognitive Map''. As the title suggests, she analyzed the internal driving forces, dynamic behavior and sustainability of Integrated Waste Management Systems (IWMSs), which are very complex systems including many aspects (environmental, economic, social, institutional, legal and technical) and stakeholders. Even at an early stage of her investigations became apparent that Fuzzy Cognitive Maps (FCMs) are appropriate tools to describe the large number of interacting and coupled entities and it copes with the inherent uncertainties of the system. At first, she created a new FCM model \cite{buruzs2013developing}, which contains six main factors. These factors were identified on the basis of the literature and represented by the concepts of the FCM. The strength of relationships among concepts were defined by the results of a survey filled out by 75 stakeholders. The simulation results provided by FCM were validated later in \cite{buruzs2013advanced}. Time series data were collected based on the relevant literature and it served as the input of a Bacterial Evolutionary Algorithm to learn the connection weights among the already specified concepts. The goal of optimization was to find an FCM that generates as similar time series as possible. Unfortunately, a strong contradiction was explored between the models created by experts and machine learning. 
+The title of Adrienn Buruzs's PhD thesis \cite{buruzsphd2015} is ``Evaluation of Sustainable Regional Waste Management Systems with Fuzzy Cognitive Map''. As the title suggests, she analyzed the internal driving forces, dynamic behavior and sustainability of Integrated Waste Management Systems (IWMSs), which are very complex systems including many aspects (environmental, economic, social, institutional, legal and technical) and stakeholders. Even at an early stage of her investigations became apparent that Fuzzy Cognitive Map (FCM) is an appropriate tool to describe the large number of interacting and coupled entities and it copes with the inherent uncertainties of the system.
+
+At first, a new FCM model \cite{buruzs2013developing} was created, which contained six concepts. These concepts were identified on the basis of the literature. The strength of relationships among concepts were defined by the results of a survey filled out by 75 stakeholders. The simulation results provided by FCM were validated later in \cite{buruzs2013advanced}. Time series data were collected based on the relevant literature and it served as the input of a Bacterial Evolutionary Algorithm to learn the connection weights among the already specified concepts and parameter $\lambda$ of the threshold function. The goal of optimization was to find an FCM that generates as similar time series as possible. Unfortunately, a strong contradiction was explored between the models created by experts and machine learning.
+
+In order to resolve the experienced problem the concepts of the original model were decomposed to further 4-7 sub-concepts according to the System-of-Systems approach, which led to a very detailed, completely new model of IWMS \cite{buruzs2013modeling}. A workshop was organized with the help of 12 stakeholders who decided the sub-concepts and their interconnections. The result of their work is a FCM containing 33 concepts in total (Fig.~\ref{fig:flower}). Unfortunately such an extremely complex model is often confusing for the experts (Fig.~\ref{fig:fcmbig}), and to work with them  may be very laborious. Note that the number of connections is a quadratic function of the number of concepts.
+
+That is why, in general, the following approach is suggested to follow in practice: start with an obviously oversized model. Experts are often uncertain about the importance of system components thus it worth include all of them in the preliminary model. Then start reducing the model automatically, in an algorithmic way until the balance of model size and required accuracy is found. In the following sections several possible ways of model reduction is presented.
+
+\begin{figure}[hbt]
+  \begin{center}
+    \includegraphics[width=\textwidth]{szines_virag.pdf}
+  \end{center}
+  \caption{The main concepts and their sub-concepts of regional IWMS.}
+  \label{fig:flower}
+\end{figure}
+
+\begin{figure}[hbt]
+  \begin{center}
+    \includegraphics[width=\textwidth]{fcm_big.pdf}
+  \end{center}
+  \caption{The 33 concept model of regional IWMS and the relationships among its concepts. It is hard to illustrate complex FCM models appropriately and graphical model visualizations often confuse experts.}
+  \label{fig:fcmbig}
+\end{figure}
+
+\section{Early model reduction methods}
+\label{sec:2}
+
+Several methods had been suggested to solve the problem of oversized models before the complex model of IWMS saw the light of the day. These approaches are based on different perspectives.
+
+In \cite{alizadeh2008using} an FCM is learned using historical data and its concepts are grouped into clusters in a unique way. The clustering is based on the DEMATEL \cite{dematel} method. The concepts are arranged on a two dimensional plot. The vertical axis classifies concepts to cause and effect groups, the position of concepts along the horizontal axis expresses the importance of them. Based on this rearrangement of concepts two clustering methods are suggested. The first one uses K-Means clustering to create clusters according to the cause-effect behavior of concepts. The cluster centers replace the original concepts in the reduced model. The second method contains two consecutive steps, and takes also the importance of concepts into consideration. Regardless of the methods applied, experts have to define the number of clusters and they must be disjoint.
 
 \begin{acknowledgement}
 If you want to include acknowledgments of assistance and the like at the end of an individual chapter please use the \verb|acknowledgement| environment -- it will automatically be rendered in line with the preferred layout.
