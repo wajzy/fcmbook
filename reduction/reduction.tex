@@ -28,6 +28,9 @@
 \usepackage{newtxtext}       % 
 \usepackage{newtxmath}       % selects Times Roman as basic font
 
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 % see the list of further useful packages
 % in the Reference Guide
 
@@ -66,7 +69,7 @@ At first, a new FCM model \cite{buruzs2013developing} was created, which contain
 
 In order to resolve the experienced problem the concepts of the original model were decomposed to further 4-7 sub-concepts according to the System-of-Systems approach, which led to a very detailed, completely new model of IWMS \cite{buruzs2013modeling}. A workshop was organized with the help of 12 stakeholders who decided the sub-concepts and their interconnections. The result of their work is a FCM containing 33 concepts in total (Fig.~\ref{fig:flower}). Unfortunately such an extremely complex model is often confusing for the experts (Fig.~\ref{fig:fcmbig}), and to work with them  may be very laborious. Note that the number of connections is a quadratic function of the number of concepts.
 
-That is why, in general, the following approach is suggested to follow in practice: start with an obviously oversized model. Experts are often uncertain about the importance of system components thus it worth include all of them in the preliminary model. Then start reducing the model automatically, in an algorithmic way until the balance of model size and required accuracy is found. In the following sections several possible ways of model reduction is presented.
+That is why, in general, the following approach is suggested to follow in practice: start with an obviously oversized, fine-grained model. Experts are often uncertain about the importance of system components thus it worth include most or all of them in the preliminary model. Then start reducing the model automatically, in an algorithmic way until the balance of model size and required accuracy is found. The numerical accuracy of reduced models are always lower by their nature, but it does not cause a problem in practice until the decisions suggested by them are the same. On the other hand, simpler models are easier to understand, their visual representation is clearer, and it is often more important for experts and managers. In the following sections several possible ways of model reduction is presented.
 
 \begin{figure}[hbt]
   \begin{center}
@@ -94,6 +97,37 @@ In \cite{alizadeh2008using} an FCM is learned using historical data and its conc
 FCM was used to predict and discover knowledge about the HIV-1 drug resistance in \cite{NapolesHIV}. The protease protein was modeled by FCM and causalities among sequence positions were estimated by Particle Swarm Optimization. Furthermore, Ant Colony Optimization was also applied in order to find the strongest sequence positions related to the resistance target. After that, some concepts and their connections were removed to decrease the complexity of the model until the quality of inference remained acceptable.
 
 Another reduction method was introduced in \cite{Homenda2014}. Weak concepts and their connections were removed, then the inference capabilities of the simplified model were tested with time series data collected from real-world applications. The reduced model replaced the original if its estimation errors were acceptable.
+
+\section{Fuzzy Tolerance Relations-based reduction methods}
+\label{sec:2}
+
+The first results on a novel state reduction method family were presented in \cite{hatwagner2014strategic,hatwagner2015new}. The members of this family differ only in the applied metric, which is used to measure the ``distance'' of concepts from each other. The methods may be considered as generalizations of the state reduction of finite state machines and sequential systems with partially defined states. They are widely applied in digital design where the complexity of the problem makes it possible \cite{kohaviz.jhan.k.2009}. The common idea is to create clusters of identical or similar concepts, and use these clusters instead of their members in the reduced model. The methods are based on Fuzzy Tolerance Relations (FTR), which is an extension of compatibility relations among crisp concepts. The methods examine the connection weights among concepts, because they define the effect on other concepts.
+
+At the very beginning the new model contains exactly as many clusters as the number of concepts in the original model. These clusters are all disjoint single element sets containing one of the original concepts. In the following, the $i^{th}$ concept is denoted by $C_i$, and similarly, the $i^{th}$ cluster is denoted by $K_i$. The number of concepts is $n$. In the next steps further concepts are added to the clusters if they are ``close enough'' to each member of the cluster. The ``distance'' of concepts can be measured by various metrics. These metrics can be selected according to the specialities of the problem, and they differentiate the members of the algorithm family. Finally, some of these expanded clusters may be identical, containing exactly the same concepts. In order to keep clusters unique, only one of these clusters is retained.
+
+One of the main functions is called $buildCluster$ (Algorithm~\ref{buildCluster}). Its goal is to create a cluster that initially contains only its $initialConcept$. Later this cluster will be expanded by merger of other concepts. The second parameter, $\epsilon$ specifies the maximum allowed distance between current cluster members and the concept under examination. The value of $\epsilon$ must be in the [0,~1] interval. This parameter plays an important role in model reduction, and have to be chosen properly by experts. Low values hardly reduce the size of the model, but high values may cause oversimplification. Its appropriate value is completely problem dependent.
+
+\begin{algorithm}
+  \caption{The \emph{buildCluster} function}\label{buildCluster}
+  \begin{algorithmic}[1]
+    \Function{buildCluster}{$initialConcept,\epsilon$}
+    \State $K\gets \{initialConcept\}$
+    \For{$i\gets0$; $i<n$; $i++$}
+      \If{$i \not= initialConcept$}
+        \State $member \gets true$
+        \While{$member$ and \Call{hasNextElement}{$K$}}
+          \State $j \gets$ \Call{nextElement}{$K$}
+          \State $member \gets$ \Call{isNearA}{$j, i, \epsilon$}
+          \If{$member$}
+            \State $K \gets K + \{i\}$
+          \EndIf
+        \EndWhile
+      \EndIf
+    \EndFor
+    \State \textbf{return} $c$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
 
 \begin{acknowledgement}
 If you want to include acknowledgments of assistance and the like at the end of an individual chapter please use the \verb|acknowledgement| environment -- it will automatically be rendered in line with the preferred layout.
