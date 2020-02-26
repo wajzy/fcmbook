@@ -118,13 +118,112 @@ One of the main functions is called $buildCluster$ (Algorithm~\ref{buildCluster}
         \While{$member$ and \Call{hasNextElement}{$K$}}
           \State $j \gets$ \Call{nextElement}{$K$}
           \State $member \gets$ \Call{isNearA}{$j, i, \epsilon$}
-          \If{$member$}
-            \State $K \gets K + \{i\}$
-          \EndIf
         \EndWhile
+        \If{$member$}
+          \State $K \gets K + \{i\}$
+        \EndIf
       \EndIf
     \EndFor
     \State \textbf{return} $c$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Function $isNearA$ is called several times in $buildCluster$ to decide whether the current concept $C_i$ can become a member of cluster $K$ or not. The number of function calls depends on how many member concepts do the cluster already have. This function (Algorithm~\ref{metricA}) implements one of the possible metrics, but can be repleced by any of the metrics presented here. The last one was suggested in \cite{hatwagnerm.f.koczyl.t.2015}.
+
+\begin{algorithm}
+  \caption{Function \emph{isNearA} implementing \emph{Metric ``A''}}\label{metricA}
+  \begin{algorithmic}[1]
+    \Function{isNearA}{$i, j, \epsilon$}
+      \State $near \gets true$
+      \For{$k\gets0$; $k<n$ and $near = true$; $k++$}
+        \If{$k\not=i$ and $k\not=j$}
+          \If{$\frac{|w_{i, k} - w_{j, k}|}{2} \geq \epsilon$ or 
+              $\frac{|w_{k, i} - w_{k, j}|}{2} \geq \epsilon$} 
+            \State $near \gets false$
+          \EndIf
+        \EndIf
+      \EndFor
+      \State \textbf{return} $near$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Metric ``A'' calculates the absolute difference of two connection weights, $w_{i,k}$ and $w_{j,k}$ from concept $C_i$, a cluster member candidate and concept $C_j$, a concept of cluster $K$ to a third concept $C_k$, where $i \ne j \ne k$, and $i, j, k = 1, ..., n$ and $n$ is the number of concepts. If the half of both this distance and the distance of weights in the opposite direction are below the design variable $\epsilon$ for all $C_k$, $C_i$ is added to cluster $K$.
+
+\begin{algorithm}
+  \caption{Function \emph{isNearB} implementing \emph{Metric ``B''}}\label{metricB}
+  \begin{algorithmic}[1]
+    \Function{isNearB}{$i, j, \epsilon, p$}
+      \State $near \gets 0$
+      \State $far \gets 0$
+      \For{$k\gets0$; $k<n$; $k++$}
+        \If{$k\not=i$ and $k\not=j$}
+          \If{$\frac{|w_{i, k} - w_{j, k}|}{2} < \epsilon$}
+            \State $near \gets near + 1$
+          \Else
+            \State $far \gets far + 1$
+          \EndIf
+          \If{$\frac{|w_{k, i} - w_{k, j}|}{2} < \epsilon$}
+            \State $near \gets near + 1$
+          \Else
+            \State $far \gets far + 1$
+          \EndIf
+        \EndIf
+      \EndFor
+      \If{$near=0$ or $far/near \geq p$}
+        \State \textbf{return} $false$
+      \Else
+        \State \textbf{return} $true$
+      \EndIf
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Metric ``B'' (Algorithm~\ref{metricB}) is a slightly modified version of Metric ``A''. The latter works well in most cases, but sometimes a small proportion of weight differences exceed the allowed value, and prevent the merger of concepts. The second metric provides a simple solution to this problem with the usage of parameter $p$. The metric allows the merger even if the distances are greater than $\epsilon$ in a small, less than $p$ proportion of the investigated cases.
+
+Theoretically the value of $p$ can be any in the $[0, 1]$ interval, but it should be rather low, however. High $p$ values makes possible to practically merge any concepts regardless the value of $\epsilon$, which propably leads to an unusable model.
+
+Metric ``B'' allowed to lower the value of parameter $\epsilon$ with a simple trick, but the third approach (Metric ``C'', Algorithm\ref{metricC}) allows the omittance of the second parameter $p$ by using the normalized, squared Euclidean distance. It is much easier to tune only one parameter instead of two in practice.
+
+\begin{algorithm}
+  \caption{Function \emph{isNearC} implementing \emph{Metric ``C''}}\label{metricC}
+  \begin{algorithmic}[1]
+    \Function{isNearC}{$i, j, \epsilon$}
+      \State $sum \gets 0$
+      \For{$k\gets0$; $k<n$; $k++$}
+        \If{$k\not=i$ and $k\not=j$}
+          \State $sum \gets sum + (w_{i, k} - w_{j, k})^2$
+          \State $sum \gets sum + (w_{k, i} - w_{k, j})^2$
+        \EndIf
+      \EndFor
+      \If{$\frac{sum}{(n-2)*8}<\epsilon$}
+        \State \textbf{return} $true$
+      \Else
+        \State \textbf{return} $false$
+      \EndIf
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Finally, Metric ``D'' (Algorithm~\ref{metricD}) works with the Manhattan-distance of concepts.
+
+\begin{algorithm}
+  \caption{Function \emph{isNearD} implementing \emph{Metric ``D''}}\label{metricD}
+  \begin{algorithmic}[1]
+    \Function{isNearD}{$i, j, \epsilon$}
+      \State $sum \gets 0$
+      \For{$k\gets0$; $k<n$; $k++$}
+        \If{$k\not=i$ and $k\not=j$}
+          \State $sum \gets sum + |w_{i, k} - w_{j, k}|$
+          \State $sum \gets sum + |w_{k, i} - w_{k, j}|$
+        \EndIf
+      \EndFor
+      \If{$\frac{sum}{(n-2)*4}<\epsilon$}
+        \State \textbf{return} $true$
+      \Else
+        \State \textbf{return} $false$
+      \EndIf
     \EndFunction
   \end{algorithmic}
 \end{algorithm}
