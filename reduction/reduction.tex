@@ -103,6 +103,8 @@ Another reduction method was introduced in \cite{Homenda2014}. Weak concepts and
 
 The first results on a novel state reduction method family were presented in \cite{hatwagner2014strategic,hatwagner2015new}. The members of this family differ only in the applied metric, which is used to measure the ``distance'' of concepts from each other. The methods may be considered as generalizations of the state reduction of finite state machines and sequential systems with partially defined states. They are widely applied in digital design where the complexity of the problem makes it possible \cite{kohaviz.jhan.k.2009}. The common idea is to create clusters of identical or similar concepts, and use these clusters instead of their members in the reduced model. The methods are based on Fuzzy Tolerance Relations (FTR), which is an extension of compatibility relations among crisp concepts. The methods examine the connection weights among concepts, because they define the effect on other concepts.
 
+\subsection{Description of the main functions used for reduction}
+
 At the very beginning the new model contains exactly as many clusters as the number of concepts in the original model. These clusters are all disjoint single element sets containing one of the original concepts. In the following, the $i^{th}$ concept is denoted by $C_i$, and similarly, the $i^{th}$ cluster is denoted by $K_i$. The number of concepts is $n$. In the next steps further concepts are added to the clusters if they are ``close enough'' to each member of the cluster. The ``distance'' of concepts can be measured by various metrics. These metrics can be selected according to the specialities of the problem, and they differentiate the members of the algorithm family. Finally, some of these expanded clusters may be identical, containing exactly the same concepts. In order to keep clusters unique, only one of these clusters is retained.
 
 One of the main functions is called $buildCluster$ (Algorithm~\ref{buildCluster}). Its goal is to create a cluster that initially contains only its $initialConcept$. Later this cluster will be expanded by merger of other concepts. The second parameter, $\epsilon$ specifies the maximum allowed distance between current cluster members and the concept under examination. The value of $\epsilon$ must be in the [0,~1] interval. This parameter plays an important role in model reduction, and have to be chosen properly by experts. Low values hardly reduce the size of the model, but high values may cause oversimplification. Its appropriate value is completely problem dependent.
@@ -184,7 +186,7 @@ Metric ``B'' (Algorithm~\ref{metricB}) is a slightly modified version of Metric 
 
 Theoretically the value of $p$ can be any in the $[0, 1]$ interval, but it should be rather low, however. High $p$ values makes possible to practically merge any concepts regardless the value of $\epsilon$, which propably leads to an unusable model.
 
-Metric ``B'' allowed to lower the value of parameter $\epsilon$ with a simple trick, but the third approach (Metric ``C'', Algorithm\ref{metricC}) allows the omittance of the second parameter $p$ by using the normalized, squared Euclidean distance. It is much easier to tune only one parameter instead of two in practice.
+Metric ``B'' allowed to lower the value of parameter $\epsilon$ with a simple trick, but the third approach (Metric ``C'', Algorithm~\ref{metricC}) allows the omittance of the second parameter $p$ by using the normalized, squared Euclidean distance. It is much easier to tune only one parameter instead of two in practice.
 
 \begin{algorithm}
   \caption{Function \emph{isNearC} implementing \emph{Metric ``C''}}\label{metricC}
@@ -227,6 +229,55 @@ Finally, Metric ``D'' (Algorithm~\ref{metricD}) works with the Manhattan-distanc
     \EndFunction
   \end{algorithmic}
 \end{algorithm}
+
+The applied metrics, its parameters ($\epsilon$, $p$) and also the details of implementation not specified here may affect the result of reduction. For example, if the concepts provided by $nextElement$ are in various orders, the content of clusters may be different, even is the size of the reduced model remains the same. The results should be revised by experts.
+
+The $buildCluster$ function creates one of the clusters of the reduced model. Another function, $buildAllClusters$ (Algorithm~\ref{buildAllClusters}) calls $buildCluster$ subsequently with different $initialConcept$ values. According to the nature of the method, multiple clusters may contain the same concepts. Only one the same clusters will be kept by the algorithm.
+
+\begin{algorithm}
+  \caption{The \emph{buildAllClusters} function}\label{buildAllClusters}
+  \begin{algorithmic}[1]
+    \Function{buildAllClusters}{$\epsilon$}
+      \State $clusters \gets \{\}$
+      \For{$i\gets0$; $i<n$; $i++$}
+        \State $K \gets$ \Call{buildCluster}{$i, \epsilon$}
+        \If{!\Call{isElementOf}{$K, clusters$}}
+          \State $clusters \gets clusters + \{K\}$
+        \EndIf
+      \EndFor
+      \State \textbf{return} $clusters$
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Function $buildAllClusters$ returns the clusters, the concepts of the reduced model, but the weights among clusters have to be defined also. Function $getWeight$ (Algorithm~\ref{getWeight}) investigates the members of its parameter clusters, $a$ and $b$, and calculates the average (arithmetic mean) weight of relationships between concepts included in cluster $a$ to the concepts of cluster $b$. This function must be called to all possible $a$, $b$ pairs to completely define the reduced model.
+
+\begin{algorithm}
+  \caption{The \emph{getWeight} function}\label{getWeight}
+  \begin{algorithmic}[1]
+    \Function{getWeight}{$a, b$}
+      \State $count \gets 0$
+      \State $sum \gets 0$
+      \While{\Call{hasNextElement}{a}}
+        \State $i = \Call{nextElement}{a}$
+        \While{\Call{hasNextElement}{b}}
+          \State $j = \Call{nextElement}{b}$
+          \If{$i\not=j$}
+            \State $count \gets count + 1$
+            \State $sum \gets sum + w_{i,j}$
+          \EndIf
+        \EndWhile
+      \EndWhile
+      \If{$count = 0$}
+        \State \textbf{return} $0$
+      \Else
+        \State \textbf{return} $\frac{sum}{count}$
+      \EndIf
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Theoretical background of FTR-based methods}
 
 \begin{acknowledgement}
 If you want to include acknowledgments of assistance and the like at the end of an individual chapter please use the \verb|acknowledgement| environment -- it will automatically be rendered in line with the preferred layout.
