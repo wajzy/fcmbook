@@ -277,7 +277,135 @@ Function $buildAllClusters$ returns the clusters, the concepts of the reduced mo
   \end{algorithmic}
 \end{algorithm}
 
+\cite{papageorgiou2017concept} presents step-by-step the reduction 
+process of a straightforward, five-concept model in detail.
+
+\subsection{Reduction of the motivating problem}
+
+The original model of the motivating problem (IWMS) contains 33 
+concepts and 638 of the theoretically possible 1056 connections, making 
+the usage of the model very cumbersome for experts. Several experiments 
+were conducted with different metrics and parameter ($\epsilon, p$) 
+values. This way the connection between reduction parameters and the 
+evoked extent of reduction can be studied. Some interesting results are 
+collected in Table~\ref{tab:reductionResults}.
+
+\begin{table}[!t]
+\caption{The number of concepts in the reduced connection matrix, using different 
+metrics \cite{hatwagnerm.f.koczyl.t.2015}}
+\label{tab:reductionResults}
+\centering
+\begin{tabular}{ccccccccc}
+\hline\noalign{\smallskip}
+\multicolumn{2}{c}{Metric ``A''} &
+  \multicolumn{3}{c}{Metric ``B''} &
+  \multicolumn{2}{c}{Metric ``C''} &
+  \multicolumn{2}{c}{Metric ``D''} \\
+\hline\noalign{\smallskip}
+$\epsilon$ & No. of concepts &
+  $\epsilon$ & p & No. of concepts &
+  $\epsilon$ & No. of concepts &
+  $\epsilon$ & No. of concepts \\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+0.3 & 28 &
+  0.1 & 0.2 & 30 &
+  0.01 & 30 &
+  0.052 & 32 \\
+0.4 & 25 &
+  0.2 & 0.05 & 30 &
+  0.016 & 28 &
+  0.059 & 30 \\
+0.5 & 18 &
+  0.2 & 0.1 & 26 &
+  0.022 & 24 &
+  0.078 & 28 \\
+0.6 & 15 &
+  0.2 & 0.2 & 23 &
+  0.027 & 22 &
+  0.097 & 26 \\
+0.7 & 12 &
+  0.3 & 0.05 & 23 &
+  0.04 & 20 &
+  0.1 & 24 \\
+0.8 & 4 &
+  0.3 & 0.1 & 21 &
+  0.048 & 18 &
+  0.104 & 22 \\
+\multicolumn{2}{c}{} & 
+  0.3 & 0.2 & 15 &
+  0.054 & 15 &
+  0.149 & 20 \\
+\multicolumn{2}{c}{} & 
+  0.4 & 0.05 & 19 &
+  0.06 & 12 &
+  0.173 & 18 \\
+\multicolumn{2}{c}{} & 
+  0.4 & 0.1 & 10 &
+  \multicolumn{2}{c}{} &
+  0.188 & 15 \\
+\multicolumn{2}{c}{} &
+  \multicolumn{3}{c}{} &
+  \multicolumn{2}{c}{} &
+  0.2 & 13 \\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+\end{tabular}
+\end{table}
+
+Of course, the number of concepts after reduction does not characterize 
+the usefulness of the model. 
+
 \subsection{Theoretical background of FTR-based methods}
+
+The name of the reduction methods covered in this section refer to the 
+fact that they all based on Fuzzy Tolerance Relations (FTR). If a 
+binary relation $R(x,x)$ is \emph{reflexive} and \emph{symmetric}, but 
+\emph{not transitive} then it is called a compatibility relation in 
+crisp contexts and \emph{tolerance relation} in fuzzy contexts 
+\cite{klirg.j.yuanb.1995}. (All further definitions in this subsection 
+are also quoted from \cite{klirg.j.yuanb.1995}.) A fuzzy binary 
+relation ``$R(x,x)$ is \emph{reflexive} iff $R(x,x) = 1$ for all $x\in 
+X$. A fuzzy relation is \emph{symmetric} iff $R(x,y)=R(y,x)$ for all 
+$x,y\in X$''. The authors emphasize again that \emph{a FTR is never 
+transitive}. (``A fuzzy relation $R(x,x)$ is transitive (\dots) if 
+$R(x,z)\geq \max_{y\in Y}\min[R(x,y), R(y,z)]$ is satisfied for each 
+pair $\langle x,z\rangle\in X^2$.'')
+
+The four metrics defined by \emph{isNear} functions are all real 
+distance functions. As such, the following conditions are satisfied by 
+function $d$, where $d:R(X,X)\rightarrow \mathbb{R}, \forall x,y,z \in 
+X$:
+
+\begin{enumerate}
+\item $d(x,x) \geq 0$
+\item $d(x,y) = 0$ iff $x=y$
+\item $d(x,y) = d(y,x)$ (symmetry)
+\item $d(x,z) \leq d(x,y) + d(y,z)$ (triangle inequality)
+\end{enumerate}
+
+The applied metrics are symmetric functions, and \emph{isNear} 
+functions always return true ($R(x,x) = 1$ or $\mu = 1$) if values of 
+the parameters are the same (reflexivity). These metrics generate 
+non-transitive mergers, therefore they create FTRs.
+
+Function \emph{buildAllClusters} initiates the process of cluster 
+building with every single concepts as \emph{initialConcept}. The called 
+\emph{buildCluster} function may extend these initially single element 
+clusters with other concepts according to the connection weights among 
+concepts and the value of parameter $\epsilon$. According to this 
+behavior, the following properties hold:
+
+\begin{itemize}
+  \item all concepts of the original model will be included in at least one cluster, 
+  \item the same concept may be included in multiple clusters, thus 
+  clusters overlap (Fig.~\ref{fig:overlapping}).
+\end{itemize}
+
+\begin{figure}[hbt]
+  \sidecaption
+  \includegraphics[width=7cm]{clusters.eps}
+  \caption{Basic example of overlapping clusters \cite{hatwagnerm.f.koczyl.t.2015}}
+  \label{fig:overlapping}
+\end{figure}
 
 \begin{acknowledgement}
 If you want to include acknowledgments of assistance and the like at the end of an individual chapter please use the \verb|acknowledgement| environment -- it will automatically be rendered in line with the preferred layout.
