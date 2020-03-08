@@ -407,8 +407,151 @@ behavior, the following properties hold:
   \label{fig:overlapping}
 \end{figure}
 
+\subsection{Two-Staged Learning Based Reduction}
+
+Original and reduced models obviously behave in a different way 
+because the latter have less concepts, the concepts 
+represent different objects of the real system, and the weights of 
+relationships among concepts must be different as well. The extent 
+of differences rely primarily on the design parameter $\epsilon$ of 
+model reduction. Certain differences in model behaviors do not mean 
+a problem until the same decisions can be made with both models. 
+Unfortunately behavioral differences are hard to measure, because 
+the values of concepts representing different objects cannot be 
+compared to each other. In order to overcome this difficulty the 
+following three groups of concepts were distingiuished in \cite
+{hatwagner2018two}: 
+\begin{enumerate}
+  \item Concepts affecting other concepts but not affected by other 
+  concepts are called \emph{input concepts}. They serve as the inputs 
+  of the modeled system. The states of these concepts remain the same 
+  during simulations, thus they neither need transformation function 
+  nor its parameter $\lambda$.
+  \item Some concepts are both affected by other concepts and they 
+  also have an effect on more or less concepts. These are the 
+  \emph{intermediate concepts}.
+  \item The third group of concepts is the \emph{output 
+  concepts} (or decision concepts). Their states are defined by 
+  other concepts, but they do not influence the state of any other 
+  concepts. 
+\end{enumerate}
+In order to make the behavioral difference of original and reduced 
+models measurable, a modified reduction method was suggested in 
+\cite{hatwagner2018two}, that allows the merger of intermediate 
+concepts only. This way simulations can be started with the same 
+initial input concept states and the results in output concepts can 
+be directly compared. The relation between the value of design 
+parameter $\epsilon$ and simulation error of the reduced model can be 
+defined statistically using several models, many initial state vectors 
+and $\epsilon$ values.
+
+The \emph{getWeight} function was also revised. The original version of 
+it (\emph{average}, Algorithm~\ref{getWeight}) defines the weight of connection 
+between two clusters ($a$ and $b$) as the arithmetic mean (average) weight of 
+connections between concepts included in the corresponding clusters. 
+More formally, the weight calculation can be expressed by Eq.~\ref
+{eq:getWeight-average}.
+
+\begin{equation}
+  \label{eq:getWeight-average}
+  w_a(a,b) = \frac{\sum_{i \in a} \sum_{j \in b} a(i,j) \times w_{ij}}{\sum_{i \in a} \sum_{j \in b} a(i,j)}
+\end{equation}
+
+\noindent where $a(i,j)$ is defined as
+
+\begin{equation}
+  \label{eq:isConnection}
+  a(i,j) = \left\{ \begin{array}{ll} 
+                     1 & \textrm{if } w_{ij} \neq 0 \textrm{,} \\
+                     0 & \textrm{otherwise.}
+                   \end{array} \right.
+\end{equation}
+
+The second approach (\emph{weighted average}) calculates the weighted 
+average of connection weights among cluster members. Greater 
+inter-concept weights play more important role in the definition of 
+inter-cluster weights (see Eq.~\ref{eq:getWeight-weightedAverage}).
+
+\begin{equation}
+  \label{eq:getWeight-weightedAverage}
+  w_w(a,b) = \frac{\sum_{i \in a} \sum_{j \in b} a(i,j) \times |w_{ij}| \times w_{ij}}{\sum_{i \in a} \sum_{j \in b} a(i,j) 
+\times |w_{ij}|}
+\end{equation}
+
+The third method (\emph{extreme}, Eq.~\ref{eq:getWeight-extreme}) selects 
+the connection between clusters with the maximum absolute value, and 
+that will be used between the clusters. If there are conncections 
+with the same absolute value but different sign, the positive one 
+will be chosen.
+
+\begin{equation}
+  \label{eq:getWeight-extreme}
+  w_e(a,b) = \left\{ \begin{array}{ll}
+                       min(w_{ij}) & \textrm{if } \left| min(w_{ij}) \right| > \left| max(w_{ij}) \right| \\
+                       & \textrm{for } \forall i \in a \wedge \forall j \in b \textrm{,} \\
+                       max(w_{ij}) & \textrm{otherwise.}
+                     \end{array} \right.
+\end{equation}
+
+The last method (\emph{sum}, Eq.~\ref{eq:getWeight-sum}) adds up the 
+weight of connections among clusters. If that would not fit in the 
+allowed $[-1,~+1]$ interval, the method rounds the weight up or 
+down to the nearest allowed value.
+
+\begin{equation}
+  \label{eq:getWeight-sum}
+  w_s(a,b) = \left\{ \begin{array}{ll}
+                       1 & \textrm{if } s(a,b) > 1 \\
+                       -1 & \textrm{if } s(a,b) < -1 \\
+                       s(a,b) & \textrm{otherwise.}
+                     \end{array} \right.
+\end{equation}
+
+where $s(a,b)$ is calculated as
+
+\begin{equation}
+  \label{eq:sum}
+  s(a,b) = \sum_{i \in a} \sum_{j \in b} w_{ij}
+\end{equation}
+
+Model reduction inevitably causes information loss and reduced 
+models behave less reliable. In order to somewhat compensate this 
+problem, concepts of the reduced model did not share a common 
+$\lambda$ as in the original model but used different steepness 
+parameters. Their values were identified by an evolutionary 
+optimization method, the Big Bang -- Big Crunch (BB-BC) \cite
+{yesilenginurbasleon2010} algorithm. The relatively low 
+computational cost and high convergence speed made it a proper choice, 
+moreover, the designer have to set only a few parameters to work 
+with it. Input concepts have constant states during simulation, thus 
+they do not need parameter $\lambda$ at all. Every output concept 
+had its own $\lambda_{oj}$ parameter. It would have been the best if 
+every intermediate concept has its own $\lambda$ value, but it 
+would have increased the computational cost of the optimization 
+disproportionately. As a trade-off, every intermediate concepts had a 
+common $\lambda_{i}$ parameter. According to these changes, the 
+inference formula was modified to Eq.~\ref{eq:manyLambdaThreshold}:
+
+\begin{equation}
+  \label{eq:manyLambdaThreshold}
+  A_i^{(t+1)} = f_i\left(\sum_{j=1}^{M} w_{ji}A_j^{(t)} + A_i^{(t)}\right), i \neq j
+\end{equation}
+
+where $f_i$ is a sigmoidal threshold function, and its slope is 
+specified by $\lambda_i$. These parameters were identified by the 
+BB-BC algorithm that minimized the objective function given by Eq.~
+\ref{eq:objective}:
+
+\begin{equation}
+  \label{eq:objective}
+  \sum_{i=1}^{m} a(s_i) \times \sum_{j=1}^{n} |o_{ij} - r_{ij}|
+\end{equation}
+
+
 \begin{acknowledgement}
-If you want to include acknowledgments of assistance and the like at the end of an individual chapter please use the \verb|acknowledgement| environment -- it will automatically be rendered in line with the preferred layout.
+If you want to include acknowledgments of assistance and the like at 
+the end of an individual chapter please use the \verb|acknowledgement| 
+environment -- it will automatically be rendered in line with the preferred layout.
 \end{acknowledgement}
 
 \input{references}
