@@ -30,6 +30,7 @@
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{multirow}
 
 % see the list of further useful packages
 % in the Reference Guide
@@ -61,7 +62,7 @@
 \abstract{<To be prepared>}
 
 \section{The Motivating Problem}
-\label{sec:1}
+\label{sec:motivatingProblem}
 
 The title of Adrienn Buruzs's PhD thesis \cite{buruzsphd2015} is ``Evaluation of Sustainable Regional Waste Management Systems with Fuzzy Cognitive Map''. As the title suggests, she analyzed the internal driving forces, dynamic behavior and sustainability of Integrated Waste Management Systems (IWMSs), which are very complex systems including many aspects (environmental, economic, social, institutional, legal and technical) and stakeholders. Even at an early stage of her investigations became apparent that Fuzzy Cognitive Map (FCM) is an appropriate tool to describe the large number of interacting and coupled entities and it copes with the inherent uncertainties of the system.
 
@@ -88,7 +89,7 @@ That is why, in general, the following approach is suggested to follow in practi
 \end{figure}
 
 \section{Early model reduction methods}
-\label{sec:2}
+\label{sec:earlyReduction}
 
 Several methods had been suggested to solve the problem of oversized models before the complex model of IWMS saw the light of the day. These approaches are based on different perspectives.
 
@@ -99,11 +100,12 @@ FCM was used to predict and discover knowledge about the HIV-1 drug resistance i
 Another reduction method was introduced in \cite{Homenda2014}. Weak concepts and their connections were removed, then the inference capabilities of the simplified model were tested with time series data collected from real-world applications. The reduced model replaced the original if its estimation errors were acceptable.
 
 \section{Fuzzy Tolerance Relations-based reduction methods}
-\label{sec:2}
+\label{sec:FTR}
 
 The first results on a novel state reduction method family were presented in \cite{hatwagner2014strategic,hatwagner2015new}. The members of this family differ only in the applied metric, which is used to measure the ``distance'' of concepts from each other. The methods may be considered as generalizations of the state reduction of finite state machines and sequential systems with partially defined states. They are widely applied in digital design where the complexity of the problem makes it possible \cite{kohaviz.jhan.k.2009}. The common idea is to create clusters of identical or similar concepts, and use these clusters instead of their members in the reduced model. The methods are based on Fuzzy Tolerance Relations (FTR), which is an extension of compatibility relations among crisp concepts. The methods examine the connection weights among concepts, because they define the effect on other concepts.
 
 \subsection{Description of the main functions used for reduction}
+\label{sec:reductionFunctions}
 
 At the very beginning the new model contains exactly as many clusters as the number of concepts in the original model. These clusters are all disjoint single element sets containing one of the original concepts. In the following, the $i^{th}$ concept is denoted by $C_i$, and similarly, the $i^{th}$ cluster is denoted by $K_i$. The number of concepts is $n$. In the next steps further concepts are added to the clusters if they are ``close enough'' to each member of the cluster. The ``distance'' of concepts can be measured by various metrics. These metrics can be selected according to the specialities of the problem, and they differentiate the members of the algorithm family. Finally, some of these expanded clusters may be identical, containing exactly the same concepts. In order to keep clusters unique, only one of these clusters is retained.
 
@@ -281,6 +283,7 @@ Function $buildAllClusters$ returns the clusters, the concepts of the reduced mo
 process of a straightforward, five-concept model in detail.
 
 \subsection{Reduction of the motivating problem}
+\label{sec:reductionIWMS}
 
 The original model of the motivating problem (IWMS) contains 33 
 concepts and 638 of the theoretically possible 1056 connections, making 
@@ -355,6 +358,7 @@ Of course, the number of concepts after reduction does not characterize
 the usefulness of the model. 
 
 \subsection{Theoretical background of FTR-based methods}
+\label{sec:theoryFTR}
 
 The name of the reduction methods covered in this section refer to the 
 fact that they all based on Fuzzy Tolerance Relations (FTR). If a 
@@ -407,20 +411,25 @@ behavior, the following properties hold:
   \label{fig:overlapping}
 \end{figure}
 
-\subsection{Two-Staged Learning Based Reduction}
+\subsection{Two-Stage Learning Based Reduction}
+\label{sec:2stage}
 
 Original and reduced models obviously behave in a different way 
 because the latter have less concepts, the concepts 
-represent different objects of the real system, and the weights of 
+represent different objects of the real system, and the 
 relationships among concepts must be different as well. The extent 
 of differences rely primarily on the design parameter $\epsilon$ of 
 model reduction. Certain differences in model behaviors do not mean 
 a problem until the same decisions can be made with both models. 
 Unfortunately behavioral differences are hard to measure, because 
 the values of concepts representing different objects cannot be 
-compared to each other. In order to overcome this difficulty the 
-following three groups of concepts were distingiuished in \cite
-{hatwagner2018two}: 
+compared directly to each other. In order to overcome this difficulty the 
+following actions were taken in \cite{hatwagner2018two}.
+
+\subsubsection{Distinction of concept groups}
+\label{sec:conceptGroups}
+
+Three groups of concepts were distingiuished: 
 \begin{enumerate}
   \item Concepts affecting other concepts but not affected by other 
   concepts are called \emph{input concepts}. They serve as the inputs 
@@ -434,16 +443,19 @@ following three groups of concepts were distingiuished in \cite
   concepts} (or decision concepts). Their states are defined by 
   other concepts, but they do not influence the state of any other 
   concepts. 
-\end{enumerate}
+\end{enumerate} 
 In order to make the behavioral difference of original and reduced 
-models measurable, a modified reduction method was suggested in 
-\cite{hatwagner2018two}, that allows the merger of intermediate 
-concepts only. This way simulations can be started with the same 
-initial input concept states and the results in output concepts can 
-be directly compared. The relation between the value of design 
-parameter $\epsilon$ and simulation error of the reduced model can be 
-defined statistically using several models, many initial state vectors 
-and $\epsilon$ values.
+models (the error of simulation) measurable, a modified reduction 
+method was suggested in \cite{hatwagner2018two}, that allows the merger 
+of intermediate concepts only. This way simulations can be started with 
+the same initial input concept states and the results in output 
+concepts can be directly compared. The relation between the value of 
+the design parameter $\epsilon$ and simulation error of the reduced model 
+can be defined statistically using several models, many initial state 
+vectors and $\epsilon$ values.
+
+\subsubsection{Modified versions of the \emph{getWeight} function}
+\label{sec:getWeightVersions}
 
 The \emph{getWeight} function was also revised. The original version of 
 it (\emph{average}, Algorithm~\ref{getWeight}) defines the weight of connection 
@@ -507,12 +519,15 @@ down to the nearest allowed value.
                      \end{array} \right.
 \end{equation}
 
-where $s(a,b)$ is calculated as
+\noindent where $s(a,b)$ is calculated as
 
 \begin{equation}
   \label{eq:sum}
   s(a,b) = \sum_{i \in a} \sum_{j \in b} w_{ij}
 \end{equation}
+
+\subsubsection{$\lambda$ optimization}
+\label{sec:lambdaOptimization}
 
 Model reduction inevitably causes information loss and reduced 
 models behave less reliable. In order to somewhat compensate this 
@@ -528,7 +543,7 @@ they do not need parameter $\lambda$ at all. Every output concept
 had its own $\lambda_{oj}$ parameter. It would have been the best if 
 every intermediate concept has its own $\lambda$ value, but it 
 would have increased the computational cost of the optimization 
-disproportionately. As a trade-off, every intermediate concepts had a 
+disproportionately. As a trade-off, every intermediate concept had a 
 common $\lambda_{i}$ parameter. According to these changes, the 
 inference formula was modified to Eq.~\ref{eq:manyLambdaThreshold}:
 
@@ -537,7 +552,7 @@ inference formula was modified to Eq.~\ref{eq:manyLambdaThreshold}:
   A_i^{(t+1)} = f_i\left(\sum_{j=1}^{M} w_{ji}A_j^{(t)} + A_i^{(t)}\right), i \neq j
 \end{equation}
 
-where $f_i$ is a sigmoidal threshold function, and its slope is 
+\noindent where $f_i$ is a sigmoidal threshold function, and its slope is 
 specified by $\lambda_i$. These parameters were identified by the 
 BB-BC algorithm that minimized the objective function given by Eq.~
 \ref{eq:objective}:
@@ -547,6 +562,147 @@ BB-BC algorithm that minimized the objective function given by Eq.~
   \sum_{i=1}^{m} a(s_i) \times \sum_{j=1}^{n} |o_{ij} - r_{ij}|
 \end{equation}
 
+Here, $m$ denotes the number of investigated \emph{scenarios} (initial 
+state vectors of simulations), $s_i$ is the i\textsuperscript{th} 
+scenario, and $a(s_i)$ is a function defined by Eq.~\ref{eq:isUsable}. 
+It expresses the fact that we are only interested in simulations 
+leading to fixed point attractors (FPs), because only they can be taken into 
+account in a decision making process. $n$ is the number of output 
+concepts, $o_{ij}$ and $r_{ij}$ are the values of the 
+j\textsuperscript{th} output concepts at the end of the simulation of 
+scenario $i$, respectively.
+
+\begin{equation}
+  \label{eq:isUsable}
+  a(s_i) = \left\{ \begin{array}{ll}
+                     1 & \textrm{if } s_i \textrm{ resulted in fixed point attractor in} \\
+                       & \textrm{original and reduced models,} \\
+                     0 & \textrm{otherwise.}
+                   \end{array} \right.
+\end{equation}
+
+\subsubsection{Test environment and the method of investigation}
+\label{sec:testEnvironment}
+
+Simulation error caused by model reduction was measured by comparing 
+the final values of output concepts of the original and reduced models. 
+Many synthetic models were generated to describe the effect of 
+reduction on a statistical basis, thereafter some models found in the 
+literature were also studied.
+
+The original synthetic models were generated randomly, taken the 
+following properties in consideration: in order to meet the definitions 
+in Section \ref{sec:conceptGroups}, input concepts were forced to have 
+at least one outgoing connection but no input connections, and 
+similarly, output concepts had to have at least one input connection 
+but no outgoing connections. Intermediate concepts must had at least 
+one incoming and outgoing connections, and they were not allowed to 
+form islands of concepts. With other words, all intermediate concepts 
+were on at least one path leading from an input to an output concept. 
+This property was checked by Kruskal's well-known minimum spanning tree 
+algorithm \cite{kruskal1956shortest}. Following Kosko's original idea, 
+self-loops were not allowed in the generated models.
+
+In order to imitate the diverse properties of real-life models, 
+synthetic models with 20 and 30 concepts were generated. In the former 
+case, there were 5 input and 3 output concepts, in the latter case 8 
+input and 4 output concepts were created. The density of the connection 
+matrix may have an effect on the typical model behavior, thus models 
+with 10, 20, 30, \dots, 60 and 80\% densities were generated. The 
+meaning of \emph{density} was defined by Eq.~\ref{eq:density}, however, 
+because in our specific case some items of the connection matrix have 
+to be always zero (all diagonal items, columns of input and rows of 
+output concepts).
+
+\begin{equation}
+  \label{eq:density}
+  d = 100 \frac{n}{\left( (c-i)(c-o) - (c-i-o) \right)}
+\end{equation}
+
+Here $n$ stands for the number of non-zero matrix elements, $c$ is the 
+total number of concepts of which $i$ are input and $o$ are output concepts.
+
+Simulations were performed with 25 model instances, thus finally 350 
+original models were involved in investigations. The common $\lambda$ 
+values of sigmoid threshold functions were also defined randomly for 
+the test set. The simulations were started with 125 unique scenarios in 
+case of all models.
+
+Next, the reduction of models followed. Three $\epsilon$ values were 
+defined for each model size--density pairs according to 
+Table~\ref{tbl:epsilonDensities}. The values were referenced by their 
+linguistic terms (\emph{low}, \emph{medium} and \emph{high}) instead of 
+their real value, because the same parameter value causes different 
+effect on models with different properties, and our goal was to cause 
+comparable reduction rates.
+
+\begin{table}[!t]
+  \caption{Model densities and corresponding $\epsilon$ values with linguistic terms.}
+  \label{tbl:epsilonDensities}
+  \centering
+  \begin{tabular}{ccccc}
+    \hline\noalign{\smallskip}
+    \multirow{2}{*}{No. of concepts} & \multirow{2}{*}{Density (\%)} & \multicolumn{3}{c}{$\epsilon$ values} \\
+    \cline{3-5}
+    & & Low & Medium & High \\
+    \noalign{\smallskip}\svhline\noalign{\smallskip}
+    20 & 10 & 0.06 & 0.08 & 0.10 \\
+    20 & 20 & 0.10 & 0.11 & 0.13 \\
+    20 & 30 & 0.13 & 0.15 & 0.16 \\
+    20 & 40 & 0.16 & 0.17 & 0.18 \\
+    20 & 50 & 0.18 & 0.20 & 0.21 \\
+    20 & 60 & 0.21 & 0.22 & 0.24 \\
+    20 & 80 & 0.24 & 0.26 & 0.28 \\
+    30 & 10 & 0.06 & 0.07 & 0.08 \\
+    30 & 20 & 0.11 & 0.12 & 0.14 \\
+    30 & 30 & 0.14 & 0.16 & 0.18 \\
+    30 & 40 & 0.18 & 0.19 & 0.20 \\
+    30 & 50 & 0.20 & 0.21 & 0.22 \\
+    30 & 60 & 0.22 & 0.24 & 0.26 \\
+    30 & 80 & 0.26 & 0.28 & 0.30 \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+  \end{tabular}
+\end{table}
+
+The reduced models were created in four versions according to the 
+various metrics applied in \emph{getWeight} versions described 
+in Section \ref{sec:getWeightVersions}. 
+
+Due to the 2 model sizes, 7 densities, 4 weight calculation methods, 3 
+different reduction rates ($\epsilon$) and 25 instances with the same 
+properties altogether 4200 reduced model instances were obtained.
+
+In the first stage, reduced models inherited the $\lambda$ parameters 
+of their corresponding parents. In the seconds step, however, 
+$\lambda$-optimized models were created and not only the error caused 
+by reduction with various $\epsilon$ parameters but the error after 
+optimization were also determined.
+
+If a simulation led to a FP at both the original and 
+the corresponding reduced model, the error caused by reduction in that 
+specific case was calculated by Eq.~\ref{eq:j1error}:
+
+\begin{equation}
+  \label{eq:j1error}
+  J_1 = \frac{\sum_{j=1}^{n} |o_j - r_j|}{n}
+\end{equation}
+
+\noindent where $n$ is the number of output concepts, $o_j$ and $r_j$ are the 
+final activation values of the j\textsuperscript{th} output concepts in 
+the original and reduced models, respectively. This is a 
+scenario-dependent error measure. In contrast, $J_2$ characterizes the 
+model instance independently from its individual instances.
+
+\begin{equation}
+  \label{eq:j2error}
+  J_2 = \frac{\sum_{i=1}^{m} J_1(i)}{m}
+\end{equation}
+
+Here $m$ denotes the number of scenarios leading to FPs. The minimum, 
+lower quartile, median, upper quartile maximum, arithmetic mean and 
+standard deviation of $J_2$ errors were also calculated for reduced 
+models with and without $\lambda$ optimization. These error measures 
+plausibly describe the information loss caused by reduction.
 
 \begin{acknowledgement}
 If you want to include acknowledgments of assistance and the like at 
