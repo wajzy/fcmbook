@@ -31,6 +31,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{multirow}
+\usepackage{subfig}
 
 % see the list of further useful packages
 % in the Reference Guide
@@ -43,7 +44,7 @@
 
 \begin{document}
 
-\title*{Concept Reduction Methods}
+\title*{Model Reduction Methods}
 % Use \titlerunning{Short Title} for an abbreviated version of
 % your contribution title if the original one is too long
 \author{Miklós F. Hatwagner}
@@ -57,9 +58,35 @@
 %
 \maketitle
 
-\abstract*{<To be prepared>}
+\abstract*{Fuzzy Cognitive Maps are very useful tools primarily in decision 
+making and management tasks. They represent the main factors, variables of a complex 
+system and the internal causal relationships among them in a straightforward 
+way. Simulations can be started with an initial state, and the future 
+states of the system under investigation can be predicted. This way, 
+what-if questions can be answered. If the model of a system is created 
+by experts often the temptation is too great to include many 
+components, because they are not sure in their importance. An oversized 
+model is excruciating to use in practice, however. Model reduction 
+methods help to decrease model size but unavoidably cause information 
+loss. This effect does not cause a problem in practice if the model 
+suggests the same decisions. This chapter covers three FCM modell 
+reduction methods, their theoretical background and behavioral 
+properties.}
 
-\abstract{<To be prepared>}
+\abstract{Fuzzy Cognitive Maps are very useful tools primarily in decision 
+making and management tasks. They represent the main factors, variables of a complex 
+system and the internal causal relationships among them in a straightforward 
+way. Simulations can be started with an initial state, and the future 
+states of the system under investigation can be predicted. This way, 
+what-if questions can be answered. If the model of a system is created 
+by experts often the temptation is too great to include many 
+components, because they are not sure in their importance. An oversized 
+model is excruciating to use in practice, however. Model reduction 
+methods help to decrease model size but unavoidably cause information 
+loss. This effect does not cause a problem in practice if the model 
+suggests the same decisions. This chapter covers three FCM modell 
+reduction methods, their theoretical background and behavioral 
+properties.}
 
 \section{The Motivating Problem}
 \label{sec:motivatingProblem}
@@ -128,12 +155,12 @@ One of the main functions is called $buildCluster$ (Algorithm~\ref{buildCluster}
         \EndIf
       \EndIf
     \EndFor
-    \State \textbf{return} $c$
+    \State \textbf{return} $K$
     \EndFunction
   \end{algorithmic}
 \end{algorithm}
 
-Function $isNearA$ is called several times in $buildCluster$ to decide whether the current concept $C_i$ can become a member of cluster $K$ or not. The number of function calls depends on how many member concepts do the cluster already have. This function (Algorithm~\ref{metricA}) implements one of the possible metrics, but can be repleced by any of the metrics presented here. The last one was suggested in \cite{hatwagnerm.f.koczyl.t.2015}.
+Function $isNearA$ is called several times in $buildCluster$ to decide whether the current concept $C_i$ can become a member of cluster $K$ or not. The number of function calls depends on how many member concepts do the cluster already have. This function (Algorithm~\ref{metricA}) implements one of the possible metrics, but can be replaced by any of the metrics presented here. The last one was suggested in \cite{hatwagnerm.f.koczyl.t.2015}.
 
 \begin{algorithm}
   \caption{Function \emph{isNearA} implementing \emph{Metric ``A''}}\label{metricA}
@@ -153,7 +180,14 @@ Function $isNearA$ is called several times in $buildCluster$ to decide whether t
   \end{algorithmic}
 \end{algorithm}
 
-Metric ``A'' calculates the absolute difference of two connection weights, $w_{i,k}$ and $w_{j,k}$ from concept $C_i$, a cluster member candidate and concept $C_j$, a concept of cluster $K$ to a third concept $C_k$, where $i \ne j \ne k$, and $i, j, k = 1, ..., n$ and $n$ is the number of concepts. If the half of both this distance and the distance of weights in the opposite direction are below the design variable $\epsilon$ for all $C_k$, $C_i$ is added to cluster $K$.
+Metric ``A'' calculates the absolute difference of two connection weights, $w_{i,k}$ and $w_{j,k}$ (Fig.~\ref{fig:similarity}). The former one is the weight of connection between the cluster member candidate concept $C_i$ and an independent concept $C_k$. The latter one is the weight of connection between $C_j$, which is already a member of cluster $K$, and $C_k$. Here $i \ne j \ne k$, and $i, j, k = 1, ..., n$ and $n$ is the number of concepts. If the half of both this distance and the distance of weights in the opposite direction are below the design variable $\epsilon$ for all $C_k$, $C_i$ is added to cluster $K$.
+
+\begin{figure}[hbt]
+  \sidecaption
+  \includegraphics[scale=1]{similarity.pdf}
+  \caption{Similarity check of two concepts, $C_i$ and $C_j$ \cite{hatwagner2018two}.}
+  \label{fig:similarity}
+\end{figure}
 
 \begin{algorithm}
   \caption{Function \emph{isNearB} implementing \emph{Metric ``B''}}\label{metricB}
@@ -232,9 +266,9 @@ Finally, Metric ``D'' (Algorithm~\ref{metricD}) works with the Manhattan-distanc
   \end{algorithmic}
 \end{algorithm}
 
-The applied metrics, its parameters ($\epsilon$, $p$) and also the details of implementation not specified here may affect the result of reduction. For example, if the concepts provided by $nextElement$ are in various orders, the content of clusters may be different, even is the size of the reduced model remains the same. The results should be revised by experts.
+The applied metrics, its parameters ($\epsilon$, $p$) and also the details of implementation not specified here may affect the result of reduction. For example, if the concepts provided by $nextElement$ are in various orders, the content of clusters may be different, even if the size of the reduced model remains the same. The results should be revised by experts.
 
-The $buildCluster$ function creates one of the clusters of the reduced model. Another function, $buildAllClusters$ (Algorithm~\ref{buildAllClusters}) calls $buildCluster$ subsequently with different $initialConcept$ values. According to the nature of the method, multiple clusters may contain the same concepts. Only one the same clusters will be kept by the algorithm.
+The $buildCluster$ function creates one of the clusters of the reduced model. Another function, $buildAllClusters$ (Algorithm~\ref{buildAllClusters}) calls $buildCluster$ subsequently with different $initialConcept$ values. According to the nature of the method, multiple clusters may contain the same concepts. Only one of the same clusters will be kept by the algorithm.
 
 \begin{algorithm}
   \caption{The \emph{buildAllClusters} function}\label{buildAllClusters}
@@ -703,6 +737,395 @@ lower quartile, median, upper quartile maximum, arithmetic mean and
 standard deviation of $J_2$ errors were also calculated for reduced 
 models with and without $\lambda$ optimization. These error measures 
 plausibly describe the information loss caused by reduction.
+
+\subsubsection{Results of Model Reduction}
+\label{sec:results}
+
+The performed tests focused on the effect of design parameter 
+$\epsilon$ on $J_2$ errors. Fig.~\ref{fig:epsilonEffect} shows the 
+results of a specific case with a box-plot: the selected models have 20 
+concepts, 10\% densities, and the applied values of $\epsilon$ were 
+0.06, 0.08 and 0.1. $\lambda$ optimization was not carried out. Greater 
+$\epsilon$ values increased the median errors and the distribution of 
+errors also, but these values remained close to zero in the 
+investigated cases.
+
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{j2_unsup_c20_d10.eps}
+  \caption{The effect of $\epsilon$ on unsupervised reduction (without 
+  $\lambda$ optimization): FCMs with 20 concepts, 10\% density and after 
+\emph{average} weight calculation method \cite{hatwagner2018two}.}
+  \label{fig:epsilonEffect}
+\end{figure}
+
+The next two figures (Fig.~\ref{fig:epsilonWeightEffect20} and 
+Fig.~\ref{fig:epsilonWeightEffect30}) gives an overview of the caused 
+error in case of various $\epsilon$ values, weight calculation methods 
+and model densities. As it was expected, $\epsilon$ significantly 
+influences the caused errors, but other interesting details can also be 
+noticed: \emph{average} and \emph{sum} weight calculation methods give 
+lower errors in most cases than other methods. The advantage of using 
+the \emph{sum} method is especially obvious when the reduction rate is 
+low. But if the model to be reduced is bigger and the intended rate of 
+reduction is also greater, \emph{average} is the suggested choice. 
+
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{j2_unsup_c20.eps}
+  \caption{The effect of weight calculation and $\epsilon$ in reduction 
+  for FCMs with 20 concepts \cite{hatwagner2018two}.}
+  \label{fig:epsilonWeightEffect20}
+\end{figure}
+
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{j2_unsup_c30.eps}
+  \caption{The effect of weight calculation and $\epsilon$ in reduction 
+  for FCMs with 30 concepts \cite{hatwagner2018two}.}
+  \label{fig:epsilonWeightEffect30}
+\end{figure}
+
+The mean and standard deviation of $J_2$ errors are easier to read in 
+a tabulated form. Table~\ref{tbl:meanStddevWeightEpsilon} contains 
+these data without considering the density of the model.
+
+\begin{table}[!t]
+  \caption{Mean and standard deviation obtained after the first stage of reduction for various weight calculation methods and 
+$\epsilon$ values \cite{hatwagner2018two}.}
+  \label{tbl:meanStddevWeightEpsilon}
+  \centering
+  \begin{tabular}{cccccc}
+    \hline\noalign{\smallskip}
+    Concepts & Epsilon ($\epsilon$) & Average 
+(10\textsuperscript{-3}) & Extreme (10\textsuperscript{-3}) & Sum 
+(10\textsuperscript{-3}) & Weighted average 
+(10\textsuperscript{-3}) \\
+    \noalign{\smallskip}\svhline\noalign{\smallskip}
+    \multirow{3}{*}{20} & Low & $46 \pm 71$ & $41 \pm 62$ & $39 \pm 63$ 
+    & $43 \pm 063$ \\
+    & Medium & $73 \pm 97$ & $81 \pm 108$ & $73 \pm 100$ & $74 \pm 100$ 
+    \\
+    & High & $110 \pm 117$ & $117 \pm 129$ & $109 \pm 120$ & $114 \pm 
+    129$ \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    \multirow{3}{*}{30} & Low & $63 \pm 75$ & $59 \pm 69$ & $59 \pm 72$ 
+    & $59 \pm 70$ \\
+    & Medium & $92 \pm 97$ & $103 \pm 106$ & $101 \pm 106$ & $97 \pm 
+    104$ \\
+    & High & $137 \pm 118$ & $157 \pm 138$ & $151 \pm 135$ & $144 \pm 
+    128$ \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+  \end{tabular}
+\end{table}
+
+Tables~\ref{tbl:epsilonDensities}, \ref{tbl:meanStddevWeightEpsilon} and 
+Figs.~\ref{fig:epsilonWeightEffect20}, \ref{fig:epsilonWeightEffect30} give 
+a toolset in the hands of the decision maker. For example, if he or she 
+wants to reduce a high density model with approximately 30 concepts in a high 
+degree, then Table~\ref{tbl:epsilonDensities} suggests to choose the 
+value of $\epsilon$ in the [0.22, 0.3] interval. Next, according to the 
+chosen value the weight calculation method can be selected with the 
+help of Figure~\ref{fig:epsilonWeightEffect30}: eg. \emph{average} can be a 
+reasonable choice.
+
+If the decision maker is still discontented with the results, $\lambda$ 
+optimization can be a solution. This method is able to somewhat 
+compensate the information loss caused by the merger of intermediate 
+concepts. Figs.~\ref{fig:learning20} and \ref{fig:learning30} makes easy 
+to compare the errors before and after $\lambda$ optimization of 20 and 
+30 concept models, respectively. As it can be seen, this method is 
+especially useful when the model is highly reduced in size. The 
+differences of mean and standard deviation of $J_2$ errors are 
+numerically given in Table~\ref{tbl:BBBCBeforeAfter}.
+
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{j2_sup_c20.eps}
+  \caption{The effect of $\lambda$ optimization in reduction approach for 
+  FCMs with 20 concepts \cite{hatwagner2018two}.}
+  \label{fig:learning20}
+\end{figure}
+
+\begin{figure}[hbt]
+  \includegraphics[width=\textwidth]{j2_sup_c30.eps}
+  \caption{The effect of $\lambda$ optimization in reduction approach for 
+  FCMs with 30 concepts \cite{hatwagner2018two}.}
+  \label{fig:learning30}
+\end{figure}
+
+\begin{table}[!t]
+  \caption{Mean and standard deviation of $J_2$ errors obtained after $\lambda$ 
+  optimization for various $\epsilon$ values and \emph{sum} weight 
+  calculation method \cite{hatwagner2018two}.}
+  \label{tbl:BBBCBeforeAfter}
+  \centering
+  \begin{tabular}{cccc}
+    \hline\noalign{\smallskip}
+    Number of & \multirow{2}{*}{Epsilon ($\epsilon$)} & Before $\lambda$ & After $\lambda$ \\
+    concepts & & optimization (10\textsuperscript{-3}) & optimization (10\textsuperscript{-3}) \\
+    \noalign{\smallskip}\svhline\noalign{\smallskip}
+    \multirow{3}{*}{20} & Low & $28 \pm 57$ & $25 \pm 38$ \\
+    & Medium & $69 \pm 97$ & $48 \pm 62$ \\
+    & High & $110 \pm 122$ & $64 \pm 76$ \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+    \multirow{3}{*}{30} & Low & $55 \pm 72$ & $50 \pm 54$ \\
+    & Medium & $101 \pm 105$ & $71 \pm 67$ \\
+    & High & $150 \pm 134$ & $97 \pm 79$ \\
+    \noalign{\smallskip}\hline\noalign{\smallskip}
+  \end{tabular}
+\end{table}
+
+\section{K-Means-based model reduction method}
+
+The well-known K-Means clustering \cite{hartigan1979algorithm} was 
+already applied to reduce FCM models in \cite{alizadeh2008using}, but 
+it was used in a different way in \cite{hatwagnernovel}. The method, 
+similarly to FTR-based methods, selects the concepts for merger based 
+on their connection weights. K-Means needs data vectors for clustering, 
+but the connection weights of an FCM are given in a matrix. Thus the 
+first task is to create vectors from a matrix in the following way. The 
+data vector $D_i$ of the corresponding concept $C_i$ is a row vector 
+constructed from the row vector of weights representing the outgoing 
+connections of $C_i$, and the transposed column vector of the weight of 
+incoming connections. Formally, $\mathbf{D_i} = [w_{i,*} \;w_{*,i}]$, 
+where $i \in [1, n]$ is the number of the concept, $w_{i,*}$ refers to 
+the outgoing and $w_{*,i}$ to the incoming connection weights of $C_i$. 
+This representation of connections makes possible for the K-Means 
+algorithm to recognize the concepts with similar relationships and merge 
+them in the same cluster.
+
+In the examples of \cite{hatwagnernovel}, the models followed the 
+guidelines of Kosko and self-loops were not allowed. Consequently, all 
+data vectors contained at least two zero-weight items, even if the method 
+itself would have been able to handle more complex models as well.
+
+In the case of FTR-based methods, the size of the reduced model was 
+controlled by $\epsilon$. In contrast, K-Means requires the number of 
+clusters, but either way, the needed size of the reduced model can be 
+specified. The properties of the underlying K-Means clustering causes 
+concepts to appear only in exactly one of the clusters, and their 
+membership value is crisp. FTR-based methods allow concepts to appear 
+in multiple clusters thus it seems a drawback, but there are several 
+K-Means implementations available (eg. in Matlab/Octave) making the 
+KM-based method also easy to implement.
+
+The connection weights among clusters were defined by Eq.~\ref{eq:getWeight-average}.
+
+\section{Fuzzy C-Means-based model reduction method}
+
+Some shortcomings of the above proposed KM-based method can be 
+compensated if Fuzzy C-Means clustering \cite{yen1999fuzzy} is applied instead of K-Means.
+Similarly to FTR-based methods, it allows concepts to appear in 
+multiple clusters, but the sum of a concept's membership values must be 
+1, and these values are not crisp (0 or 1).
+
+Fuzzy C-Means also processes data vectors; these can be constructed 
+the very same way as they were in case of the KM-based method. The size 
+of the reduced model have to be defined in advance, too. The weight 
+calculation method needs a slight modification, however, in order to 
+take the various membership values into account (Eq.~\ref{eq:w}).
+
+\begin{eqnarray}
+  \label{eq:num} num = \sum_{i,j,i \ne j}\mu_{a,i}\mu_{b,j}w_{i,j} \\
+  \label{eq:denom} denom = \sum_{i,j,i \ne j}\mu_{a,i}\mu_{b,j} \\
+  \label{eq:w} w(a,b) = \left \{ 
+    \begin{array}{ll}
+      num/denom & if denom \ne 0 \\
+      0         & otherwise \\
+    \end{array}
+  \right.
+\end{eqnarray}
+
+In Eqs.~\ref{eq:num}-\ref{eq:w}, $\mu_{a,i}$ denotes the membership 
+value of concept $C_i$ in cluster $a$, and similarly, $\mu_{b,j}$ 
+express the membership value of $C_j$ in cluster $b$. $w_{i,j}$ is the 
+weight of connection between concepts $C_i$ and $C_j$, and $w(a,b)$ is 
+the weight of connection between the two corresponding clusters.
+
+\section{Comparison of the reduced models created by different methods}
+
+First, a basic example model is reduced by KM and Fuzzy C-Means-based 
+methods. This way, the operation of these methods is easy to follow, 
+understand and validate the results. After that, the complex model of 
+the motivating problem of waste management is reduced by all the three 
+methods and some interesting properties of the reduced models are 
+studied.
+
+\subsection{Reduction of the basic model}
+
+The model to reduce contains 4 concepts, but its reduced versions 
+contain only 3 clusters. Fig.~\ref{fig:simpleExample} and 
+Table~\ref{tab:connBasic} show the content of clusters, the connection 
+weights among them and also the data vectors created for clustering. In 
+Fig.~\ref{fig:simpleExample}.~c) the membership values less than 0.5 
+are grayed out.
+
+\begin{center}
+  \begin{figure}
+    \setlength\tabcolsep{.2cm}
+    \begin{tabular}{p{.3\textwidth}p{.3\textwidth}p{.3\textwidth}}
+      \includegraphics[width=\linewidth]{original.eps} &
+      \includegraphics[width=\linewidth]{kClustered.eps} &
+      \includegraphics[width=\linewidth]{fClustered.eps} \\
+      \textbf{a)} The original model to be reduced. &
+      \textbf{b)} Model reduced with the KM-based method. &
+      \textbf{c)} Model reduced with the FCM-based method. All concepts of the original model are merged into the clusters with different membership values.\\
+    \end{tabular}
+    \caption{Reduction of the basic example model \cite{hatwagnernovel}.}
+    \label{fig:simpleExample}
+  \end{figure}
+\end{center}
+
+\begin{table}
+  \caption{Connection matrix and data vectors of the basic example model \cite{hatwagnernovel}.}
+  \label{tab:connBasic}
+  \begin{center}
+    \subfloat[Connection matrix of the basic example model.]{
+      \def\arraystretch{1.1}
+      \begin{tabular}{l|cccc}
+               & $C_1$ & $C_2$ & $C_3$ & $C_4$ \\ \hline
+         $C_1$ & 0     & 0.5   & 0     & 0 \\
+         $C_2$ & -1    & 0     & -1    & 1 \\
+         $C_3$ & 0     & 1     & 0     & 0 \\
+         $C_4$ & 0     & -1    & 0     & 0 \\
+      \end{tabular}
+    }
+    \hspace{1em}
+    \subfloat[$D_i$ data vectors of concepts and their corresponding clusters.]{
+      \def\arraystretch{1.1}
+      \begin{tabular}{llcccccccc}
+         \hline
+         Data vector & Cluster & & & & & & \\ \hline
+         $D_1$ & $K_2$ & 0     & 0.5   & 0     & 0     & 0     & -1    & 0     & 0 \\
+         $D_2$ & $K_1$ & -1    & 0     & -1    & 1     & 0.5   & 0     & 1     & -1 \\
+         $D_3$ & $K_2$ & 0     & 1     & 0     & 0     & 0     & -1    & 0     & 0 \\
+         $D_4$ & $K_3$ & 0     & -1    & 0     & 0     & 0     & 1     & 0     & 0 \\
+         \hline
+      \end{tabular}
+    }
+  \end{center}
+\end{table}
+
+\subsection{Reduction of the motivating model}
+
+A basic model helps understanding the operation and behavior of a 
+method, but in real life, the reduction of such a simple model is not 
+necessary at all. That is why, and also to compare the reduced models 
+created by three different methods, the reduction of the motivating 
+problem follows. The original model contains 33 concepts. It was 
+reduced to 18 ($\epsilon$ = 0.048), 23 ($\epsilon$ = 0.024) and 28 
+($\epsilon$ = 0.018) clusters. The details are tabulated in 
+Tables~\ref{tab:clusters18}-\ref{tab:clusters28_wide}. Because of the 
+limited space, exact membership values are not included in case of the 
+Fuzzy C-Means-based method, concepts with greater than 0.5 
+membership values are indicated as cluster members instead.
+
+The Fuzzy C-Means-based method behaved in a very interesting way. 
+First, the concepts' membership values were always very close to their 
+extremes (0 or 1). For example, all ,,high'' values were at least 0.994 
+in the investigated cases. Second, the default parameter value of the 
+Fuzzy C-Means algorithm ($m$ = 2) resulted in models were all 
+membership values were the same. In order to get useful models, the 
+parameter had to be decreased to 1.1, but the algorithm not sensitive 
+to slightly modified values neither. The cause of this unintended 
+effect was certainly the very long, 66-element data vectors.
+
+The clusters of the three reduced models are rather different. Experts 
+should be asked about the usefulness and interpretability of these 
+models, but it would be even better to carry out a detailed behavioral 
+analysis and comparison in the near future. 
+
+\begin{table}
+\caption{Reduced models containing 18 clusters \cite{hatwagnernovel}.}
+\label{tab:clusters18}
+\resizebox{\textwidth}{!}{%
+  \begin{tabular}{llll}
+  \hline\noalign{\smallskip}
+  Cluster & KM-based & FCM-based & FTR-based \\
+  \noalign{\smallskip}\hline\noalign{\smallskip}
+  K1 & C1.1+C6.5 & C1.1+C1.3+C4.7+C6.5 & C1.1+C1.2+C1.3+C2.3+C4.3+C4.4+C4.7+C5.1+C6.3 \\
+  K2 & C1.2+C4.3+C6.2+C6.3+C6.4 & C1.2+C3.2 & C1.1+C1.2+C1.4+C1.5+C3.3+C4.4+C5.2+C5.3+C5.4+C6.4+C6.5 \\
+  K3 & C1.3 & C1.4+C1.5 & C1.1+C1.2+C1.5+C3.3+C3.4+C3.5+C4.3+C5.4+C6.4 \\
+  K4 & C1.4 & C2.1+C2.3 & C1.1+C1.2+C3.2+C3.3+C3.4+C3.5+C6.1 \\
+  K5 & C1.5+C4.4+C4.5+C4.6 & C2.2 & C1.1+C1.3+C1.4+C2.5+C3.1+C3.3+C4.3+C4.4+C4.5+C4.6+C6.1 \\
+  K6 & C2.1 & C2.4 & C1.1+C1.3+C1.4+C2.5+C3.1+C3.3+C4.3+C4.4+C4.6+C6.1+C6.4 \\
+  K7 & C2.2 & C2.5 & C1.1+C1.3+C1.4+C3.1+C3.3+C4.3+C6.1+C6.2+C6.3+C6.4 \\
+  K8 & C2.3 & C2.6 & C1.1+C1.4+C1.5+C2.5+C3.3+C3.5+C4.4+C5.2+C5.3+C6.4 \\
+  K9 & C2.4 & C3.1 & C1.1+C1.4+C1.5+C4.1+C4.4+C4.5+C4.6+C5.2+C5.3 \\
+  K10 & C2.5+C2.6 & C3.3+C3.5+C5.4 & C1.1+C1.4+C2.5+C3.1+C3.3+C3.5+C4.3+C4.4+C6.1+C6.4 \\
+  K11 & C3.1+C3.2+C3.4 & C3.4 & C1.1+C1.4+C2.5+C4.2+C4.4+C4.5+C4.6+C5.2+C5.3 \\
+  K12 & C3.3+C3.5+C3.6+C5.4 & C3.6 & C1.1+C2.3+C2.5+C3.3+C3.5+C4.3+C4.4+C5.3+C6.4 \\
+  K13 & C4.1 & C4.1+C4.4 & C1.1+C3.1+C3.2+C3.3+C3.4+C3.5+C6.1 \\
+  K14 & C4.2 & C4.2+C5.2+C5.3 & C1.1+C3.1+C3.3+C3.4+C3.5+C4.3+C6.1+C6.2+C6.4 \\
+  K15 & C4.7 & C4.3+C6.2+C6.3+C6.4 & C1.2+C3.3+C3.4+C3.5+C3.6+C5.4 \\
+  K16 & C4.7 & C4.5+C5.1 & C2.1+C2.3+C2.5+C4.4+C5.1 \\
+  K17 & C5.2+C5.3 & C4.6 & C2.2+C2.3 \\
+  K18 & C6.1 & C6.1 & C2.4+C2.6 \\
+  \noalign{\smallskip}\hline
+  \end{tabular}
+}
+\end{table}
+
+\begin{table}
+\caption{Reduced models containing 23 clusters \cite{hatwagnernovel}.}
+\label{tab:clusters23}
+\begin{center}
+  \begin{tabular}{llll}
+  \hline\noalign{\smallskip}
+  Cluster & KM-based & FCM-based & FTR-based \\
+  \noalign{\smallskip}\hline\noalign{\smallskip}
+  K1 & C1.1 & C1.1 & C1.1+C1.4 \\
+  K2 & C1.2 & C1.2+C6.2 & C1.1+C1.5 \\
+  K3 & C1.3+C4.7 & C1.3 & C1.1+C6.5 \\
+  K4 & C1.4 & C1.4+C1.5+C4.1+C4.4 & C1.2+C6.4 \\
+  K5 & C1.5 & C2.1+C2.3 & C1.3+C4.7 \\
+  K6 & C2.1 & C2.2 & C2.1 \\
+  K7 & C2.2 & C2.4 & C2.2 \\
+  K8 & C2.3 & C2.5 & C2.3 \\
+  K9 & C2.4 & C2.6 & C2.4 \\
+  K10 & C2.5 & C3.1 & C2.5 \\
+  K11 & C2.6 & C3.2 & C2.6 \\
+  K12 & C3.1 & C3.3+C3.4+C3.5 & C3.1 \\
+  K13 & C3.2+C3.3+C3.5+C5.4 & C3.6 & C3.2 \\
+  K14 & C3.4 & C4.2+C5.3+C5.4 & C3.3+C3.4+C3.5 \\
+  K15 & C3.6 & C4.3+C6.3 & C3.6 \\
+  K16 & C4.1+C4.2+C4.4+C4.5+C4.6 & C4.5 & C4.1 \\
+  K17 & C4.3+C6.2+C6.3 & C4.6 & C4.2+C4.4 \\
+  K18 & C5.1 & C4.7 & C4.3+C6.1+C6.2+C6.3+C6.4 \\
+  K19 & C5.2 & C5.1 & C4.4+C4.5+C4.6 \\
+  K20 & C5.3 & C5.2 & C5.1 \\
+  K21 & C6.1 & C6.1 & C5.2 \\
+  K22 & C6.4 & C6.4 & C5.3 \\
+  K23 & C6.5 & C6.5 & C5.4 \\
+  \noalign{\smallskip}\hline
+  \end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+  \caption{Reduced models containing 28 clusters \cite{hatwagnernovel}.}
+  \label{tab:clusters28_wide}
+  \resizebox{\textwidth}{!}{%
+    \begin{tabular}{llllp{0.3cm}llll}
+      \cline{1-4} \cline{6-9} \noalign{\smallskip}
+      Cluster & KM-based & FCM-based & FTR-based & &
+      Cluster & KM-based & FCM-based & FTR-based \\
+      \noalign{\smallskip} \cline{1-4} \cline{6-9} \noalign{\smallskip}
+      K1 & C1.1+C5.1 & C1.1 & C1.1 & & K15 & C3.4 & C4.2 & C3.4 \\
+      K2 & C1.2 & C1.2+C1.5 & C1.2 & & K16 & C3.5 & C4.3 & C3.6 \\
+      K3 & C1.3+C4.7 & C1.3 & C1.3 & & K17 & C3.6 & C4.4 & C4.1 \\
+      K4 & C1.4 & C1.4 & C1.4 & & K18 & C4.1 & C4.5 & C4.2 \\
+      K5 & C1.5 & C2.1+C2.3 & C1.5 & & K19 & C4.2 & C4.6 & C4.3+C6.2+C6.3+C6.4 \\
+      K6 & C2.1 & C2.2 & C2.1 & & K20 & C4.3+C6.1 & C4.7+C6.3 & C4.4+C4.5 \\
+      K7 & C2.2 & C2.4 & C2.2 & & K21 & C4.4 & C5.1 & C4.5+C4.6 \\
+      K8 & C2.3 & C2.5 & C2.3 & & K22 & C4.5 & C5.2 & C4.7 \\
+      K9 & C2.4 & C2.6 & C2.4 & & K23 & C4.6 & C5.3 & C5.1 \\
+      K10 & C2.5 & C3.1 & C2.5 & & K24 & C5.2 & C5.4 & C5.2 \\
+      K11 & C2.6 & C3.2 & C2.6 & & K25 & C5.3 & C6.1 & C5.3 \\
+      K12 & C3.1 & C3.3+C3.4 & C3.1 & & K26 & C6.2 & C6.2 & C5.4 \\
+      K13 & C3.2 & C3.5+C3.6 & C3.2 & & K27 & C6.3+C6.4 & C6.4 & C6.1 \\
+      K14 & C3.3+C5.4  & C4.1 & C3.3+C3.5 & & K28 & C6.5 & C6.5 & C6.5 \\
+      \noalign{\smallskip} \cline{1-4} \cline{6-9}
+    \end{tabular}
+  }
+\end{table}
 
 \begin{acknowledgement}
 If you want to include acknowledgments of assistance and the like at 
