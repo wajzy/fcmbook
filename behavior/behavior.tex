@@ -57,9 +57,93 @@
 
 \abstract{<To be prepared>}
 
-\section{Section Heading}
-\label{sec:1}
+\section{Introduction}
+\label{sec:intro}
 
+Decision support systems and methods are at the center of 
+researcher's attention for a long time \cite{busemeyer1999dynamic}, 
+because prudent decision making can be really hard in practice, 
+especially if the effect of many related factors with continuously 
+changing states have to be taken into account, and a wrong 
+intervention may cause serious personal injury or damage to property.
+
+Fuzzy Cognitive Maps (FCMs) \cite{b.kosko1986} can be one of the 
+possible tools of a decision maker \cite{papageorgiou2013fuzzy}. 
+They are bipolar fuzzy graphs that are made of nodes interconnected 
+by directed, weighted edges. The various factors, variables of a 
+complex system can be described by the nodes (also called \emph
+{concepts}) and the strength of causal relations among them can be 
+expressed by edges. Even if an FCM model can characterize the 
+studied system only qualitatively \cite{j.l.salmeron2009}, this 
+method is easy to use and provides a transparent, clear description 
+of it. Modeling capabilities and simulations that reveal the dynamic 
+behavior of the system made FCM an inevitable opportunity in 
+decision support.
+
+There are two main ways of model creation \cite{papageorgiou2012learning}:
+\begin{enumerate}
+  \item an expert, or a group of experts can give the description of 
+  the system, or
+  \item based on a long time-series database a suitable machine 
+  learning technique may generate the model with more or less support 
+  of experts.
+\end{enumerate}
+
+In the first case the expert who makes the model unavoidably 
+includes his/her beliefs and subjectivity in the map. This can be 
+decreased if a group of experts works out the model instead of a 
+sole expert \cite{kosko1988hidden,groumpos2010fuzzy}, but the result 
+will contain some uncertainty for sure. They can agree relatively 
+quickly and easily on the number of concepts, the existence and sign 
+of relationships, but the magnitude of those relationships are much 
+harder to define, especially if an order of importance or strength 
+exists among them. The number of relationships is a quadratic 
+function of the number of concepts, therefore even if the modelers 
+follow Kosko's advice and they do not include self-loops in the FCM, 
+in case of a small model containing only 10 concepts the number of 
+relationships can be up to 90. It will be really hard to define so 
+many weights properly and worse is that the steepness parameter 
+$\lambda$ of the threshold function does not have any connection 
+with real objects, but its value may strongly influence the results 
+of simulations (number and values of fixed points, limit cycles, 
+chaotic behavior).
+
+That is why the second method, based on machine learning is preferred 
+in most cases. In those cases it can be applied the concepts 
+are still defined by experts, however, and/or the nature of time series data. 
+Sometimes such data is not available and only the first method 
+remains.
+
+No matter how the model is made, it worth investigating the effect 
+of small modifications of connection weights or steepness parameter 
+on model behavior. The sensitive points of the model can be revealed 
+and experts can discuss about the possibilities on making the model 
+more stable and reliable. Unfortunately it cannot be made by hand, 
+following a trial and error approach. In an FCM the connection 
+weights are specified by real numbers, thus the number of possible 
+modified weights are practically infinite. With a reasonable 
+compromise we can say that the weights to try can be limited to the 
+number of used linguistic variables, eg. 5: -1, -0.5, 0, 0.5 and 1. 
+In the already mentioned model containing only 10 concepts, where 
+even 90 relationships may exist, the number of model versions may up 
+to $5^{90} = 8,078\times10^{62}$. Obviously the experts are primarily 
+interested only in the effect of slight modifications, thus they 
+would be satisfied with the check of one less and one greater values 
+(or keeping the current one), but it could still mean $3^{90} = 
+8,728\times10^{42}$ model versions. That can be even worse if they 
+want to take the effect of different $\lambda$ values into account and 
+of course, one simulation is not enough to characterize the behavioral 
+effect of a modification, many simulations (depending on the model 
+size to cover all interesting parts of the search space) are needed 
+and these simulations are rather time consuming on their own. There is 
+a clear need for an automated, consistent method for such 
+investigations, and the work on that started in 
+\cite{hatwagner2016uncertainty,hatwagner2017behavioral} and further 
+developed in \cite{hatwagner2019banking,hatwagner2018improved}. This 
+task is too big even for a computer: an exhaustive search cannot be 
+performed, but an evolutionary search technique, eg. the Bacterial 
+Evolutionary Algorithm is able to guide the directions of search for a 
+slightly modified model that behaves significantly different.
 
 \input{references}
 \end{document}
