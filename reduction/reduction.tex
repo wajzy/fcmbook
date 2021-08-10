@@ -69,7 +69,7 @@ components, because they are not sure in the importance of them. An oversized
 model is excruciating to use in practice, however. Model reduction 
 methods help to decrease model size but unavoidably cause information 
 loss as well. This effect does not cause a problem in practical decision making applications if the model 
-suggests the same decisions. This chapter covers three FCM modell 
+suggests the same decisions. This chapter covers three FCM model 
 reduction methods, their theoretical background and behavioral 
 properties.}
 
@@ -157,16 +157,15 @@ Function $isNearA$ is called several times in $buildCluster$ to decide whether t
   \caption{Function \emph{isNearA} implementing \emph{Metric ``A''}}\label{metricA}
   \begin{algorithmic}[1]
     \Function{isNearA}{$i, j, \epsilon$}
-      \State $near \gets true$
-      \For{$k\gets0$; $k<n$ and $near = true$; $k++$}
+      \For{$k\gets0$; $k<n$; $k++$}
         \If{$k\not=i$ and $k\not=j$}
           \If{$\frac{|w_{i, k} - w_{j, k}|}{2} \geq \epsilon$ or 
               $\frac{|w_{k, i} - w_{k, j}|}{2} \geq \epsilon$} 
-            \State $near \gets false$
+            \State \textbf{return} $false$
           \EndIf
         \EndIf
       \EndFor
-      \State \textbf{return} $near$
+      \State \textbf{return} $true$
     \EndFunction
   \end{algorithmic}
 \end{algorithm}
