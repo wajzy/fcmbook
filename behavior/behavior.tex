@@ -1,0 +1,475 @@
+%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for your "contribution" to a contributed volume
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[graybox]{svmult}
+
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+
+% choose options for [] as required from the list
+% in the Reference Guide
+
+\usepackage{type1cm}        % activate if the above 3 fonts are
+                            % not available on your system
+%
+\usepackage{makeidx}         % allows index generation
+\usepackage{graphicx}        % standard LaTeX graphics tool
+                             % when including figure files
+\usepackage{multicol}        % used for the two-column index
+\usepackage[bottom]{footmisc}% places footnotes at page bottom
+
+
+\usepackage{newtxtext}       % 
+\usepackage{newtxmath}       % selects Times Roman as basic font
+
+% see the list of further useful packages
+% in the Reference Guide
+
+\makeindex             % used for the subject index
+                       % please use the style svind.ist with
+                       % your makeindex program
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title*{Behavioral Analysis of Fuzzy Cognitive Maps}
+% Use \titlerunning{Short Title} for an abbreviated version of
+% your contribution title if the original one is too long
+\author{Miklós F. Hatwagner}
+% Use \authorrunning{Short Title} for an abbreviated version of
+% your contribution title if the original one is too long
+\institute{Miklós F. Hatwagner \at Széchenyi István University, Győr, 
+Hungary \email{miklos.hatwagner@sze.hu}}
+%
+% Use the package "url.sty" to avoid
+% problems with special characters
+% used in your e-mail or web address
+%
+\maketitle
+
+\abstract*{Fuzzy Cognitive Maps are widely used in decision making. If 
+historical time series data is available, the preferred way of model 
+creation is based on machine learning. Sometimes such data in 
+unavailable, however, and only experts can define the model. These 
+models unavoidably contain more or less subjective elements, but 
+even if the models are created by machine learning, their thorough 
+investigation is recommended before usage. Sometimes a subtle 
+modification of connection weights or a different $\lambda$ parameter 
+in the threshold function can result in a model that behaves 
+significatly different. This chapter describes a method to 
+automatically investigate a model and detect if some of its components 
+affect its dynamic hahavior significantly.}
+
+\abstract{Fuzzy Cognitive Maps are widely used in decision making. If 
+historical time series data is available, the preferred way of model 
+creation is based on machine learning. Sometimes such data in 
+unavailable, however, and only experts can define the model. These 
+models unavoidably contain more or less subjective elements, but 
+even if the models are created by machine learning, their thorough 
+investigation is recommended before usage. Sometimes a subtle 
+modification of connection weights or a different $\lambda$ parameter 
+in the threshold function can result in a model that behaves 
+significatly different. This chapter describes a method to 
+automatically investigate a model and detect if some of its components 
+affect its dynamic hahavior significantly.}
+
+\section{Introduction}
+\label{sec:intro}
+
+Decision support systems and methods are at the center of 
+researcher's attention for a long time \cite{busemeyer1999dynamic}, 
+because prudent decision making can be really hard in practice, 
+especially if the effect of many related factors with continuously 
+changing states have to be taken into account, and a wrong 
+intervention may cause serious personal injury or damage to property.
+
+Fuzzy Cognitive Maps (FCMs) \cite{b.kosko1986} can be one of the 
+possible tools of a decision maker \cite{papageorgiou2013fuzzy}. 
+They are bipolar fuzzy graphs that are made of nodes interconnected 
+by directed, weighted edges. The various factors, variables of a 
+complex system can be described by the nodes (also called \emph
+{concepts}) and the strength of causal relations among them can be 
+expressed by edges. Even if an FCM model can characterize the 
+studied system only qualitatively \cite{j.l.salmeron2009}, this 
+method is easy to use and provides a transparent, clear description 
+of it. Modeling capabilities and simulations that reveal the dynamic 
+behavior of the system made FCM an inevitable opportunity in 
+decision support.
+
+There are two main ways of model creation \cite{papageorgiou2012learning}:
+\begin{enumerate}
+  \item an expert, or a group of experts can give the description of 
+  the system, or
+  \item based on a long time-series database a suitable machine 
+  learning technique may generate the model with more or less support 
+  of experts.
+\end{enumerate}
+
+In the first case the expert who makes the model unavoidably 
+includes his/her beliefs and subjectivity in the map. This can be 
+decreased if a group of experts works out the model instead of a 
+sole expert \cite{kosko1988hidden,groumpos2010fuzzy}, but the result 
+will contain some uncertainty for sure. They can agree relatively 
+quickly and easily on the number of concepts, the existence and sign 
+of relationships, but the magnitude of those relationships are much 
+harder to define, especially if an order of importance or strength 
+exists among them. The number of relationships is a quadratic 
+function of the number of concepts, therefore even if the modelers 
+follow Kosko's advice and they do not include self-loops in the FCM, 
+in case of a small model containing only 10 concepts the number of 
+relationships can be up to 90. It will be really hard to define so 
+many weights properly and worse is that the steepness parameter 
+$\lambda$ of the threshold function does not have any connection 
+with real objects, but its value may strongly influence the results 
+of simulations (number and values of fixed points (FPs), limit cycles 
+(LSs), chaotic behavior (CB)).
+
+That is why the second method, based on machine learning is preferred 
+in most cases. In those cases it can be applied the concepts 
+are still defined by experts, however, and/or the nature of time series data. 
+Sometimes such data is not available and only the first method 
+remains.
+
+No matter how the model is made, it worth investigating the effect 
+of small modifications of connection weights or steepness parameter 
+on model behavior. The sensitive points of the model can be revealed 
+and experts can discuss about the possibilities on making the model 
+more stable and reliable. Unfortunately it cannot be made by hand, 
+following a trial and error approach. In an FCM the connection 
+weights are specified by real numbers, thus the number of possible 
+modified weights are practically infinite. With a reasonable 
+compromise we can say that the weights to try can be limited to the 
+number of used linguistic variables, eg. 5: -1, -0.5, 0, 0.5 and 1. 
+In the already mentioned model containing only 10 concepts, where 
+even 90 relationships may exist, the number of model versions may up 
+to $5^{90} = 8,078\times10^{62}$. Obviously the experts are primarily 
+interested only in the effect of slight modifications, thus they 
+would be satisfied with the check of one less and one greater values 
+(or keeping the current one), but it could still mean $3^{90} = 
+8,728\times10^{42}$ model versions. That can be even worse if they 
+want to take the effect of different $\lambda$ values into account and 
+of course, one simulation is not enough to characterize the behavioral 
+effect of a modification, many simulations (depending on the model 
+size to cover all interesting parts of the search space) are needed 
+and these simulations are rather time consuming on their own. There is 
+a clear need for an automated, consistent method for such 
+investigations, and the work on that started in 
+\cite{hatwagner2016uncertainty,hatwagner2017behavioral} and further 
+developed in \cite{hatwagner2019banking,hatwagner2018improved}. This 
+task is too big even for a computer: an exhaustive search cannot be 
+performed, but an evolutionary search technique, eg. the Bacterial 
+Evolutionary Algorithm is able to guide the directions of search for a 
+slightly modified model that behaves significantly different.
+
+\section{Bacterial Evolutionary Algorithm}
+\label{sec:bea}
+
+The thorough description of Bacterial Evolutionary Algorithm (BEA) 
+can be found eg. in \cite
+{nawa1997study,nawa1998study,nawa1998bacterial,nawa1999fuzzy}, only 
+a short summary is given here to prove the applicability and 
+usefulness of this algorithm. BEA is an evolutionary algorithm and 
+as such able to solve any non-linear, highly modal, high dimensional 
+global optimization problems. Another advantage is that it uses only 
+a few parameters to set by the researcher. Despite its efficiency, 
+BEA has high computational demand. It can be speed up by parallel 
+execution \cite{hatwagner2011parallel} or by a problem specific 
+local search operator \cite{koczy2018enhanced}, converting BEA to 
+Bacterial Memetic Algorithm.
+
+BEA works with a collection of possible solutions, which is also called 
+\emph{population}. The algorithm continuously improves the members of 
+the population, which are also called \emph{bacteria}, because the 
+method imitates the reproduction and evolution of bacteria in the 
+nature. Two operators are used to achieve this goal: \emph{bacterial 
+mutation} is responsible for the exploration of the search space, and 
+\emph{gene transfer} exploits the genetic information stored in 
+bacteria in order to create new, hopefully fitter, more viable 
+bacteria. The algorithm uses these operators alternately until the 
+termination criterion is fulfilled, eg. a specified fitness value is 
+achieved, a predefined number of generations are generated, the 
+convergence slowed down, etc. Usually the best bacterium of the 
+last population is considered result.
+
+Bacterial mutation develops all bacteria at the same time, 
+independently from each other. First, some identical copies of a 
+bacterium are created, they are the \emph{clones} of the original 
+bacterium. Then every alleles of the clones are mutated, changed in 
+random order. If any of these changes lead to a better objective 
+value, the old allele is replaced by the new one in the original 
+bacterium and in all the clones. This operator is elitist by its 
+nature because it keeps the genetic information of the old bacterium 
+if newer bacteria are less fit.
+
+Gene transfer starts with the sort of bacteria according to their 
+fitness values. The bacteria with better fitness go in the 
+\emph{superior} set, the remaining bacteria are locked up in the 
+\emph{inferior} set. Next, the operator selects a bacterium randomly 
+from the superior set, and another one from the inferior set. At least 
+one allele of the better bacterium is transferred to the worse 
+bacterium. Then the modified bacterium have to be evaluated again, and 
+if it has a better objective value, it has a chance to migrate into 
+the superior set and pass on its genetic data to other bacteria during 
+the consecutive gene transfers.
+
+\section{Details of the behavior analysis}
+\label{sec:behaviorAnalysis}
+
+The goal of behavior analysis is to modify a model only slightly but 
+causing significant impact on its behavior at the same time. This 
+can be an increased number of FPs, the presence of new LCs or CB. If 
+such modifications are possible, they have to be further analysed by 
+experts before the model is applied in decision making.
+
+The search for small but significant modifications are controlled by 
+BEA. In order to decrease the search space and accelerate the 
+process, only 9 of the possible different weight values were tried 
+in the last, most advanced version of the method \cite
+{hatwagner2018improved}, according to the applied linguistic 
+variables ($-1, -0.75, -0.5, ..., +1$). In our experience, experts 
+reliably recognize the lack of causal relationships, therefore zero 
+weight connections were left untouched. It also helps to speed up the 
+search process.
+
+The bacteria of BEA encodes a possible, common $\lambda$ value in the 
+$[0.1, 10]$ interval for all concepts, and all non-zero connection 
+weights in a fixed order.
+
+The behavioral properties of modified models were tested with several 
+simulations started with different inital state vectors. Only 5 
+activation values were used: 0, 0.25, 0.5, 0.75 and 1. 1000 unique 
+scenarios were generated randomly, and the same set was used to test 
+all modified models for comparability. The program was prepared to 
+automatically detect FPs, and count the number of different 
+initial state vectors that resulted in the same FP. The simulations 
+were definitely stopped after 100 iterations. In most cases, FCM 
+converge very quickly to a FP. In the rare remaining cases the program 
+searched for repeating sequences of state vectors to detect LCs. If it 
+was not successful, the outcome of the simulation was considered a CB. 
+
+The state of a model was considered stable only if the state of all 
+concepts were stable, viz. their values changed by at most 0.001 in 
+the last five consecutive time steps. Unfortunately the stable 
+states are not exactly the same in many cases due to rounding errors 
+of floating point arithmetic or other issues. That is why the 
+similar final states were clustered by K-Means algorithm \cite
+{hartigan1979algorithm} and the cluster centers were considered the 
+common, stable, final states. K-Means needs to know the number of 
+clusters in advance, however. It was automatically estimated by gap 
+statistics \cite{tibshirani2001estimating}.
+
+Behavioral analysis is a multiobjective optimization problem. The 
+sometimes conflicting goals were as follows:
+\begin{enumerate}
+  \item maximize the number of FPs,
+  \item maximize the number of LCs,
+  \item maximize the number of CBs,
+  \item maximize the similarity of original and modified model 
+  versions.
+\end{enumerate}
+
+\noindent The similarity of models was measured by Eq.~\ref{eq:difference}.
+
+\begin{equation}
+  \label{eq:difference}
+  d = \sum_{i=1}^{N} \sum_{j=1}^{N} (o_{ij} - m_{ij})^2
+\end{equation}
+
+\noindent where $d$ is the difference of models, $N$ is the number of 
+concepts, $o_{ij}$ is the weight of connection in the original, and 
+$m_{ij}$ is the weight of connection in the modified weight matrix. 
+The fitness values of bacteria were defined in a Pareto-optimal 
+manner. The Pareto-front of all bacteria constituted the members of the 
+set of bacteria with highest fitness value, the Pareto-front of the 
+remaining bacteria were the members of the set of second best bacteria, 
+and so on.
+
+\section{Case study}
+\label{sec:banking}
+
+A real life problem of a bank was chosen in \cite
+{hatwagner2018improved,hatwagner2019banking} to demonstrate the 
+usefulness and operability of the developed program. The concepts 
+are collected and interpreted in Table~\ref{tab:OMcategories}, the 
+causal relationships among concepts are given by Table~\ref
+{tab:OMconnectionMtx}.
+
+\begin{table}
+\caption{Concept IDs, names and categories of the investigated model.}
+\label{tab:OMcategories}
+\begin{center}
+\begin{tabular}{lll}
+\hline\noalign{\smallskip}
+Concept ID & Concept name & Category\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+C1 & Clients & \multirow{3}{*}{Assets}\\
+C2 & Rules \& regulations & \\
+C3 & New IT solutions & \\
+\noalign{\smallskip} \hline \noalign{\smallskip}
+C4 & Funding & \multirow{2}{*}{Money}\\
+C5 & Cost reduction & \\
+\noalign{\smallskip} \hline \noalign{\smallskip}
+C6 & Profit/loss & \multirow{2}{*}{Financials}\\
+C7 & Investments & \\
+\noalign{\smallskip} \hline \noalign{\smallskip}
+C8 & Staff & Human resources\\
+\noalign{\smallskip} \hline \noalign{\smallskip}
+C9 & New services & \multirow{2}{*}{Product and process development}\\
+C10 & Quality & \\
+\noalign{\smallskip} \hline \noalign{\smallskip}
+C11 & Client development & \multirow{3}{*}{Output measures}\\
+C12 & Service development & \\
+C13 & Productivity & \\
+\noalign{\smallskip} \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Connection matrix of the FCM model.}
+\label{tab:OMconnectionMtx}
+\begin{center}
+\begin{tabular}{l|lllllllllllll}
+\hline\noalign{\smallskip}
+ & C1 & C2 & C3 & C4 & C5 & C6 & C7 & C8 & C9 & C10 & C11 & C12 & C13\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+C1 &    0 &     0 &     0.5 &   0 &     0 &     0.5 &   1 &     0.5 &   0 &     0.5 &   1 &     0.5 &   0\\
+C2 &    1 &     0 &     0.5 &   1 &     0 &     0 &     1 &     1 &     0.5 &   0 &     1 &     1 &     0\\
+C3 &    1 &     0.5 &   0 &     0 &     0 &     -1 &    0 &     -1 &    1 &     0 &     1 &     1 &     1\\
+C4 &    0 &     0 &     0 &     0 &     0 &     0 &     0 &     0 &     0 &     0 &     0 &     0 &     0\\
+C5 &    0 &     0 &     1 &     -0.5 &  0 &     0 &     0 &     -1 &    0 &     0 &     0 &     1 &     0\\
+C6 &    0 &     0 &     0 &     0 &     -0.5 &  0 &     0 &     0 &     0 &     0 &     0 &     0 &     0\\
+C7 &    0.5 &   0 &     0.5 &   1 &     0 &     0.5 &   0 &     0 &     0 &     -0.5 &  0 &     0 &     0\\
+C8 &    0 &     0 &     0 &     0 &     0 &     -0.5 &  0 &     0 &     0 &     0.5 &   0 &     0 &     -0.5\\
+C9 &    0 &     0 &     0 &     1 &     0 &     0.5 &   0.5 &   0.5 &   0 &     -0.5 &  0 &     0.5 &   0\\
+C10 &   0.5 &   0 &     0 &     0 &     0 &     0 &     0.5 &   0.5 &   0.5 &   0 &     1 &     0 &     0\\
+C11 &   0 &     0 &     0.5 &   0.5 &   0 &     0 &     0 &     0 &     0.5 &   0.5 &   0 &     0 &     1\\
+C12 &   0 &     0 &     0.5 &   0.5 &   0 &     0 &     1 &     0 &     0.5 &   0 &     0.5 &   0 &     -0.5\\
+C13 &   0 &     0 &     1 &     0 &     0 &     0.5 &   0 &     0 &     0 &     0 &     1 &     0 &     0\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+First, the behavior of the original model was analyzed. The $\lambda$ 
+steepness parameter of the threshold function used in the inference 
+equation was set to 5. Two FPs were found. 23.1\% of the investigated 
+cases resulted in the first, and the remaining 76.9\% in the second 
+FP. These FPs are pretty similar, only the values of concepts C6 and 
+C8 differentiates them. C4 is an input concept and it was left out 
+from Table~\ref{tab:OMFPs}.
+
+\begin{table}
+\caption{Fixed-point attractors of the model.}
+\label{tab:OMFPs}
+\begin{center}
+\begin{tabular}{llll}
+\hline\noalign{\smallskip}
+Concepts & C1-C3, C5, C7, C9-C13 & C6 & C8\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 & 1.000 & 0.150 & 0.990\\
+FP\#2 & 1.000 & 0.855 & 0.922\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Second, the behavioral analysis of modified models followed. The 
+model contains 13 concepts, but the density of it is only $\approx$39
+\%. It still meant a 62 variable optimization problem. The 
+population of BEA consisted of 10 bacteria, 3 clones were created 
+for each bacterium, and also 3 gene transfers were applied in the 
+consecutive iterations. The optimization was stopped after the 10%
+\textsuperscript{th} generation. The connection matrices of the two 
+best modified models (they are the members of the first 
+Pareto-front, see Fig.~\ref{fig:pareto}) are given by Tables~ \ref
+{tab:V1connectionMtx} and \ref{tab:V2connectionMtx}. The main 
+properties of these models are collected in Table~\ref
+{tab:variantsProps}. 
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{pareto.eps}
+  \caption{Bacteria of Pareto-fronts in the last generation.}
+  \label{fig:pareto}
+\end{figure}
+
+\begin{table}
+\caption{Connection matrix of the 1\textsuperscript{st} model variant.}
+\label{tab:V1connectionMtx}
+\begin{center}
+\begin{tabular}{l|lllllllllllll}
+\hline\noalign{\smallskip}
+ &      C1 &    C2 &    C3 &    C4 &    C5 &    C6 &    C7 &    C8 &    C9 &    C10 &   C11 &   C12 &   C13\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+C1 &    0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.5 &   1.0 &   0.25 &  0.0 &   0.25 &  0.75 &  0.5 &   0.0\\
+C2 &    1.0 &   0.0 &   0.5 &   1.0 &   0.0 &   0.0 &   0.5 &   0.75 &  0.75 &  0.0 &   0.75 &  1.0 &   0.0\\
+C3 &    0.25 &  0.0 &   0.0 &   0.0 &   0.0 &   -1.0 &  0.0 &   -0.75 & 0.5 &   0.0 &   0.5 &   0.75 &  1.0\\
+C4 &    0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0\\
+C5 &    0.0 &   0.0 &   1.0 &   -0.5 &  0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.5 &   0.0\\
+C6 &    0.0 &   0.0 &   0.0 &   0.0 &   -0.5 &  0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0\\
+C7 &    0.75 &  0.0 &   -0.25 & 1.0 &   0.0 &   0.25 &  0.0 &   0.0 &   0.0 &   1.0 &   0.0 &   0.0 &   0.0\\
+C8 &    0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.25 &  0.0 &   0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   -0.5\\
+C9 &    0.0 &   0.0 &   0.0 &   1.0 &   0.0 &   0.25 &  -0.75 & 0.25 &  0.0 &   0.25 &  0.0 &   0.75 &  0.0\\
+C10 &   -0.75 & 0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.25 &  -0.5 &  0.25 &  0.0 &   -0.25 & 0.0 &   0.0\\
+C11 &   0.0 &   0.0 &   0.75 &  0.5 &   0.0 &   0.0 &   0.0 &   0.0 &   0.5 &   0.5 &   0.0 &   0.0 &   1.0\\
+C12 &   0.0 &   0.0 &   0.5 &   0.5 &   0.0 &   0.0 &   0.25 &  0.0 &   0.25 &  0.0 &   -0.75 & 0.0 &   -0.5\\
+C13 &   0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.0 &   0.0 &   0.75 &  0.0 &   0.0\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Connection matrix of the 2\textsuperscript{nd} model variant.}
+\label{tab:V2connectionMtx}
+\begin{center}
+\begin{tabular}{l|lllllllllllll}
+\hline\noalign{\smallskip}
+ &      C1 &    C2 &    C3 &    C4 &    C5 &    C6 &    C7 &    C8 &    C9 &    C10 &   C11 &   C12 &   C13\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+C1 &    0.0 &   0.0 &   0.5 &   0.0 &   0.0 &   0.5 &   1.0 &   1.0 &   0.0 &   1.0 &   0.75 &  0.5 &   0.0\\
+C2 &    -0.75 & 0.0 &   0.0 &   1.0 &   0.0 &   0.0 &   0.5 &   0.0 &   0.5 &   0.0 &   0.0 &   0.5 &   0.0\\
+C3 &    0.25 &  0.25 &  0.0 &   0.0 &   0.0 &   -0.75 & 0.0 &   -1.0 &  0.0 &   0.0 &   0.5 &   -0.5 &  0.0\\
+C4 &    0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0\\
+C5 &    0.0 &   0.0 &   -0.5 &  -0.5 &  0.0 &   0.0 &   0.0 &   0.25 &  0.0 &   0.0 &   0.0 &   0.5 &   0.0\\
+C6 &    0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0\\
+C7 &    0.5 &   0.0 &   0.0 &   1.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.0 &   -0.5 &  0.0 &   0.0 &   0.0\\
+C8 &    0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   -1.0 &  0.0 &   0.0 &   0.0 &   1.0 &   0.0 &   0.0 &   0.5\\
+C9 &    0.0 &   0.0 &   0.0 &   1.0 &   0.0 &   0.0 &   0.75 &  1.0 &   0.0 &   -0.75 & 0.0 &   0.75 &  0.0\\
+C10 &   0.5 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.0 &   0.5 &   -0.25 & 0.0 &   -0.75 & 0.0 &   0.0\\
+C11 &   0.0 &   0.0 &   -1.0 &  0.5 &   0.0 &   0.0 &   0.0 &   0.0 &   0.25 &  1.0 &   0.0 &   0.0 &   -1.0\\
+C12 &   0.0 &   0.0 &   0.0 &   0.5 &   0.0 &   0.0 &   1.0 &   0.0 &   0.5 &   0.0 &   -0.25 & 0.0 &   0.25\\
+C13 &   0.0 &   0.0 &   1.0 &   0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.0 &   0.0 &   0.5 &   0.0 &   0.0\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Main properties of the modified model variants.}
+\label{tab:variantsProps}
+\begin{center}
+\begin{tabular}{lll}
+\hline\noalign{\smallskip}
+Property & 1\textsuperscript{st} variant & 2\textsuperscript{nd} variant\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+$\lambda$ value & 2.366 & 2.070 \\
+Number of FPs & 44 & 48 \\
+Number of LCs & 0 & 0 \\
+Number of chaotic behavior & 0 & 0 \\
+Difference from orig. model ($d$) & 15.938 & 30.500 \\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\input{references}
+\end{document}
