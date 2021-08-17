@@ -1011,9 +1011,9 @@ The Fuzzy C-Means-based method behaved in a very interesting way.
 First, the concepts' membership values were always very close to their 
 extremes (0 or 1). For example, all ,,high'' values were at least 0.994 
 in the investigated cases. Second, the default parameter value of the 
-Fuzzy C-Means algorithm ($m$ = 2) resulted in models were all 
+Fuzzy C-Means algorithm ($m$ = 2) resulted in models where all 
 membership values were the same. In order to get useful models, the 
-parameter had to be decreased to 1.1, but the algorithm not sensitive 
+parameter had to be decreased to 1.1, but the algorithm is not sensitive 
 to slightly modified values neither. The cause of this unintended 
 effect was certainly the very long, 66-element data vectors.
 
@@ -1117,10 +1117,14 @@ analysis and comparison in the near future.
   }
 \end{table}
 
+\section{Summary}
+
+Complex Fuzzy Cognitive Maps are hard to use for experts for several reasons: the number of connections is the quadratic function of the number of concepts. As the number of concepts increases, it becomes very cumbersome to define the exact weights or at least the order of weights of all connections. Complex models take more time to simulate, it is harder to understand and follow the modeled processes, define the initial values of concepts, etc. On the one hand, experts are thus interested in creating small models but on the other hand, if they are not sure about the relevance of a factor they are tempted to include it in the model. This caveat can be resolved by model reduction methods: all concepts can be included in the initial model regardless of their real importance. The initial model can be reduced then by creating clusters of initial concepts until the balance of complexity and accuracy is found. These clusters can be considered the concepts of the reduced map.
+
+Three model reduction methods were covered in this chapter, namely, the Fuzzy Tolerance Relation (FTR) based, the K-Means (KM) based, and the Fuzzy C-Means (FCM) based methods. The algorithms of methods were detailed including the possible implementations of distance functions and inter-cluster weights. Guides and tables were provided to estimate the value of design parameter $\epsilon$ to achieve the degree of reduction required. The behavioral change of models can be compensated by the optimization of $\lambda$ steepness parameter of the threshold function. It was shown that by choosing a common $\lambda$ for all intermediate concepts and individual $\lambda$s for the output concepts the computational complexity of optimization can be maintained at an acceptable level while the behavioral changes of reduced models are minimized.
+
 \begin{acknowledgement}
-If you want to include acknowledgments of assistance and the like at 
-the end of an individual chapter please use the \verb|acknowledgement| 
-environment -- it will automatically be rendered in line with the preferred layout.
+The research presented in this paper was carried out as part of the EFOP-3.6.2-16-2017-00016 project in the framework of the New Széchenyi Plan. The completion of this project is funded by the European Union and co-financed by the European Social Fund.
 \end{acknowledgement}
 
 \input{references}

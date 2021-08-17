@@ -55,7 +55,7 @@ Hungary \email{miklos.hatwagner@sze.hu}}
 %
 \maketitle
 
-\abstract*{Fuzzy Cognitive Maps are widely used in decision making. If 
+\newcommand{\behaviorAbstract}{Fuzzy Cognitive Maps are widely used in decision making. If 
 historical time series data is available, the preferred way of model 
 creation is based on machine learning. Sometimes such data in 
 unavailable, however, and only experts can define the model. These 
@@ -68,18 +68,9 @@ significatly different. This chapter describes a method to
 automatically investigate a model and detect if some of its components 
 affect its dynamic hahavior significantly.}
 
-\abstract{Fuzzy Cognitive Maps are widely used in decision making. If 
-historical time series data is available, the preferred way of model 
-creation is based on machine learning. Sometimes such data in 
-unavailable, however, and only experts can define the model. These 
-models unavoidably contain more or less subjective elements, but 
-even if the models are created by machine learning, their thorough 
-investigation is recommended before usage. Sometimes a subtle 
-modification of connection weights or a different $\lambda$ parameter 
-in the threshold function can result in a model that behaves 
-significatly different. This chapter describes a method to 
-automatically investigate a model and detect if some of its components 
-affect its dynamic hahavior significantly.}
+\abstract*{\behaviorAbstract}
+
+\abstract{\behaviorAbstract}
 
 \section{Introduction}
 \label{sec:intro}
@@ -91,10 +82,8 @@ especially if the effect of many related factors with continuously
 changing states have to be taken into account, and a wrong 
 intervention may cause serious personal injury or damage to property.
 
-Fuzzy Cognitive Maps (FCMs) \cite{b.kosko1986} can be one of the 
-possible tools of a decision maker \cite{papageorgiou2013fuzzy}. 
-They are bipolar fuzzy graphs that are made of nodes interconnected 
-by directed, weighted edges. The various factors, variables of a 
+Chapter 1 gives an overview of Fuzzy Cognitive Maps (FCMs) \cite{b.kosko1986}, but it worth summarize the most important properties of FCMs again. FCM can be one of the possible tools of a decision-maker \cite{papageorgiou2013fuzzy}. 
+It is a bipolar fuzzy graph that is made of nodes interconnected by directed, weighted edges. The various factors, variables of a 
 complex system can be described by the nodes (also called \emph
 {concepts}) and the strength of causal relations among them can be 
 expressed by edges. Even if an FCM model can characterize the 
@@ -130,13 +119,15 @@ many weights properly and worse is that the steepness parameter
 $\lambda$ of the threshold function does not have any connection 
 with real objects, but its value may strongly influence the results 
 of simulations (number and values of fixed points (FPs), limit cycles 
-(LSs), chaotic behavior (CB)).
+(LSs), chaotic behavior (CB)). FPs represent the stable states of a system and some of them should be achieved, others avoid according to the needs of stakeholders. LCs and CB are usually undesirable in decision making tasks.
 
-That is why the second method, based on machine learning is preferred 
-in most cases. In those cases it can be applied the concepts 
+Because of the inherent subjectivity and uncertainty the second method, based on machine learning is preferred 
+in most cases of modeling. In those cases it can be applied the concepts 
 are still defined by experts, however, and/or the nature of time series data. 
 Sometimes such data is not available and only the first method 
 remains.
+
+Another possible scenario is when the model is created by the reduction of a bigger initial model (see Chapter 6). The reduction may cause smaller or larger behavioral changes according to the degree of reduction, eg. the number of fixed-point attractors can be different.
 
 No matter how the model is made, it worth investigating the effect 
 of small modifications of connection weights or steepness parameter 
@@ -470,6 +461,19 @@ Difference from orig. model ($d$) & 15.938 & 30.500 \\
 \end{tabular}
 \end{center}
 \end{table}
+
+\section{Summary}
+The developed program has reached its main goal: it finds several slightly modified models that behave differently: have more FPs, LCs, or behave chaotically. The number of FPs, the final activation values of concepts in FPs are defined, moreover, the scenarios leading to FPs, LCs, or chaotic behavior are revealed as well. These results, especially those that apply to FPs are very interesting for decision-makers because they represent the stable states of the modeled system. Some of the stable states should be avoided, others are desirable. The experts can study which scenarios lead to these states and they can make well-founded decisions that lead to one of the desired states according to the analysis. In most cases, LCs and CB are undesirable outcomes as they represent unstable, hardly predictable operations.
+
+Even if the results are promising, there are still some problems with the method to be solved or deficiencies to be improved. One suspicious detail is the extremely high number of FPs in modified models. The applied algorithm of cluster number estimation should be reviewed because in the case of high dimensional spaces often very similar state vectors are classified in different clusters thus the number of FPs is overestimated.
+
+The other, more serious problem is the time requirement of computations. The root cause of this is that the behavioral analysis is based on BEA, and evolutionary optimization algorithms are compute-intensive in general. In this case, the objective function to be evaluated is also very complex: the behavioral properties of a specific, modified model variant (an individual/bacterium of a population) can be discovered only by a long series of FCM simulations.
+
+The speed of computing can be increased by the implementation of some advanced technologies, eg. parallel computing or using GPUs where they are appliable. Despite these, the method itself remains computation-heavy, and there is still a need for the quick characterization of models in an analytical way. This demand led to a thorough study of FCM models with mathematical tools.
+
+\begin{acknowledgement}
+The research presented in this paper was carried out as part of the EFOP-3.6.2-16-2017-00015 project in the framework of the New Széchenyi Plan. The completion of this project is funded by the European Union and co-financed by the European Social Fund.
+\end{acknowledgement}
 
 \input{references}
 \end{document}
