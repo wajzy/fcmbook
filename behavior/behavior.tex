@@ -283,18 +283,17 @@ set of bacteria with highest fitness value, the Pareto-front of the
 remaining bacteria were the members of the set of second best bacteria, 
 and so on.
 
-\section{Case study}
+\section{Case studies}
 \label{sec:banking}
 
 A real life problem of a bank was chosen in \cite
 {hatwagner2018improved,hatwagner2019banking} to demonstrate the 
-usefulness and operability of the developed program. The concepts 
-are collected and interpreted in Table~\ref{tab:OMcategories}, the 
-causal relationships among concepts are given by Table~\ref
-{tab:OMconnectionMtx}.
+usefulness and operability of the developed program. Our client was interested in the result of different possible decisions regarding the organizational structure and operation which can be defined by performing FCM simulations. 
+
+The concepts of the model are collected and interpreted in Table~\ref{tab:OMcategories}, the causal relationships among concepts are given by Table~\ref{tab:OMconnectionMtx}. 
 
 \begin{table}
-\caption{Concept IDs, names and categories of the investigated model.}
+\caption{Concept IDs, names and categories of the first investigated model.}
 \label{tab:OMcategories}
 \begin{center}
 \begin{tabular}{lll}
@@ -325,7 +324,7 @@ C13 & Productivity & \\
 \end{table}
 
 \begin{table}
-\caption{Connection matrix of the FCM model.}
+\caption{Connection matrix of the first example FCM model.}
 \label{tab:OMconnectionMtx}
 \begin{center}
 \begin{tabular}{l|lllllllllllll}
@@ -356,10 +355,10 @@ equation was set to 5. Two FPs were found. 23.1\% of the investigated
 cases resulted in the first, and the remaining 76.9\% in the second 
 FP. These FPs are pretty similar, only the values of concepts C6 and 
 C8 differentiates them. C4 is an input concept and it was left out 
-from Table~\ref{tab:OMFPs}.
+from Table~\ref{tab:OMFPs}. 
 
 \begin{table}
-\caption{Fixed-point attractors of the model.}
+\caption{Fixed-point attractors of the first example model.}
 \label{tab:OMFPs}
 \begin{center}
 \begin{tabular}{llll}
@@ -373,7 +372,13 @@ FP\#2 & 1.000 & 0.855 & 0.922\\
 \end{center}
 \end{table}
 
-Second, the behavioral analysis of modified models followed. The 
+The state represented by the second FP is much more desirable than the first, because it means that higher profit can be reached, while the number of staff can also be decreased. The result of every possible decisions can be checked by an FCM simulation.
+
+The connection matrix was created by experts and may contain subjective elements and intrinsic uncertainty, however. It is hard to define the connection weight of all the 61 connections, even if only five weight values were used. If only some of these relations are estimated wrong, the result of a decision can be different than the predicted one and large financial loss may be suffered. Moreover, the value of the steepness parameter $\lambda$ was chosen according to its widely applied value in literature (5), but it does not have any relationship with the modeled system. What if using another value a significantly different state will be predicted? Before realizing any intervention in the life of the organisation it worth checking the consequences of the same decision with a slightly modified model. Maybe a bit higher or lover $\lambda$ value, a modified connection weight lead to a significantly different effect which must be further analysed and validated. If such a slightly modified model cannot be found, the developed model can be used with a higher degree of confidence.
+
+The results of such an analysis are interesting even if the weights are  well-chosen, because if the behavior of these modified models are known it can be seen how and where should the model be changed in order to eventuate a better operation, or what effects jeopardize the operation of it.
+
+That is why the behavioral analysis of modified models followed. The 
 model contains 13 concepts, but the density of it is only $\approx$39
 \%. It still meant a 62 variable optimization problem. The 
 population of BEA consisted of 10 bacteria, 3 clones were created 
@@ -381,10 +386,12 @@ for each bacterium, and also 3 gene transfers were applied in the
 consecutive iterations. The optimization was stopped after the 10%
 \textsuperscript{th} generation. The connection matrices of the two 
 best modified models (they are the members of the first 
-Pareto-front, see Fig.~\ref{fig:pareto}) are given by Tables~ \ref
+Pareto-front, see Fig.~\ref{fig:pareto}) are given by Tables~\ref
 {tab:V1connectionMtx} and \ref{tab:V2connectionMtx}. The main 
 properties of these models are collected in Table~\ref
 {tab:variantsProps}. 
+
+It is clear that with slight model modifications much more, over 40 possible outcomes can occur. It is vital to re-check the consequences of decisions which led to the same FP in the case of the original model.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{pareto.eps}
@@ -393,7 +400,7 @@ properties of these models are collected in Table~\ref
 \end{figure}
 
 \begin{table}
-\caption{Connection matrix of the 1\textsuperscript{st} model variant.}
+\caption{Connection matrix of the 1\textsuperscript{st} model variant of the first example model.}
 \label{tab:V1connectionMtx}
 \begin{center}
 \begin{tabular}{l|lllllllllllll}
@@ -419,7 +426,7 @@ C13 &   0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.0 &   
 \end{table}
 
 \begin{table}
-\caption{Connection matrix of the 2\textsuperscript{nd} model variant.}
+\caption{Connection matrix of the 2\textsuperscript{nd} model variant of the first example model.}
 \label{tab:V2connectionMtx}
 \begin{center}
 \begin{tabular}{l|lllllllllllll}
@@ -445,7 +452,7 @@ C13 &   0.0 &   0.0 &   1.0 &   0.0 &   0.0 &   0.75 &  0.0 &   0.0 &   0.0 &   
 \end{table}
 
 \begin{table}
-\caption{Main properties of the modified model variants.}
+\caption{Main properties of the modified model variants on Pareto front \#1.}
 \label{tab:variantsProps}
 \begin{center}
 \begin{tabular}{lll}
@@ -457,6 +464,189 @@ Number of FPs & 44 & 48 \\
 Number of LCs & 0 & 0 \\
 Number of chaotic behavior & 0 & 0 \\
 Difference from orig. model ($d$) & 15.938 & 30.500 \\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+As a second example, another model of the same bank is presented (see Table~\ref{tab:BP2Spartial-connectionMtx} and Fig.~\ref{fig:BP2Spartial}). Due to the confidential nature of the data, the meaning of concepts and their connections cannot be detailed here, but this is not relevant to the presentation of the applied method, neither. The behavior of the model was analysed using three different $\lambda$ values first, without any modifications on the connection matrix. When the steepness parameter was set to 5, three FPs were found (see Table~\ref{tab:BP2Spartial5-FPs}). The last one occurred only in 0.2\% of the investigated cases. This raises the suspicion that this is not a real fixed point, but an extremely slow convergence to another fixed point happened, which was mistakenly perceived by the software as a FP. However, repeating the study with a reduced $\lambda$ value of 4.7, it can be seen that the incidence of the same fixed point increased to 8.2\%, while the activation value of concept C2.5 left practically the same (0.506 vs. 0.502). Even some inital state vectors are listed in Table~\ref{tab:BP2Spartial-scenarios} as examples that lead to the specified FPs. Further reducing the value of the $\lambda$ parameter to 1.4235, only one fixed point remained (see Table~\ref{tab:BP2Spartial14235-FPs}). These examinations show how important the value of parameter $\lambda$ is in FCM simulations. The effect of any planned interventions must be checked by several simulations using various steepness parameters in order to realize all the possible outcomes.
+
+\begin{table}
+\caption{Connection matrix of the second example FCM model.}
+\label{tab:BP2Spartial-connectionMtx}
+\begin{center}
+\begin{tabular}{l|lllllllllll}
+\hline\noalign{\smallskip}
+ & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+C1.2 & 0 & 0 & 0 & 0.5 & 1 & 0.5 & 0 & 0.5 & 1 & 0.5 & 0\\
+C2.4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+C2.5 & 0 & -0.5 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 1 & 0\\
+C3.1 & 0 & 0 & -0.5 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+C3.2 & 0.5 & 1 & 0 & 0.5 & 0 & 0 & 0 & -0.5 & 0 & 0 & 0\\
+C4.1 & 0 & 0 & 0 & -0.5 & 0 & 0 & 0 & 0.5 & 0 & 0 & -0.5\\
+C5.2 & 0 & 1 & 0 & 0.5 & 0.5 & 0.5 & 0 & -0.5 & 0 & 0.5 & 0\\
+C5.3 & 0.5 & 0 & 0 & 0 & 0.5 & 0.5 & 0.5 & 0 & 1 & 0 & 0\\
+C6.1 & 0 & 0.5 & 0 & 0 & 0.5 & 0 & 0.5 & 0.5 & 0 & 1 & 1\\
+C6.2 & 0 & 0.5 & 0 & 0 & 1 & 0 & 0.5 & 0 & 0.5 & 0 & -0.5\\
+C6.3 & 0 & 0 & 0 & 0.5 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{BP2Spartial.eps}
+  \caption{Graph representation of the second example model.}
+  \label{fig:BP2Spartial}
+\end{figure}
+
+\begin{table}
+\caption{Fixed-point attractors of the second example model ($\lambda = 5$).}
+\label{tab:BP2Spartial5-FPs}
+\begin{center}
+\begin{tabular}{lllllll}
+\hline\noalign{\smallskip}
+Concepts & C1.2, C2.4 & C2.5 & C3.1, C3.2, C4.1, C5.2 & C5.3 & C6.1, C6.2 & C6.3\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 (25.6\%)& 1.000 & \textbf{0.145} & 1.000 & 0.999 & 1.000 & 0.993\\
+FP\#2 (74.2\%) & 1.000 & \textbf{0.855} & 1.000 & 0.999 & 1.000 & 0.993\\
+FP\#3 (0.2\%) & 1.000 & \textbf{0.506} & 1.000 & 0.999 & 1.000 & 0.993\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Fixed-point attractors of the second example model ($\lambda = 4.7$).}
+\label{tab:BP2Spartial47-FPs}
+\begin{center}
+\begin{tabular}{lllllll}
+\hline\noalign{\smallskip}
+Concepts & C1.2, C2.4 & C2.5 & C3.1, C3.2, C4.1, C5.2 & C5.3 & C6.1, C6.2 & C6.3\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 (21.8\%)& 1.000 & \textbf{0.198} & 1.000 & 0.999 & 1.000 & 0.991\\
+FP\#2 (70.0\%) & 1.000 & \textbf{0.814} & 1.000 & 0.999 & 1.000 & 0.991\\
+FP\#3 (8.2\%) & 1.000 & \textbf{0.502} & 1.000 & 0.999 & 1.000 & 0.991\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Examples of initial state vectors that eventuate different fixed point attractors for the second example model ($\lambda = 4.7$).}
+\label{tab:BP2Spartial-scenarios}
+\begin{center}
+\begin{tabular}{llllllllllll}
+\hline\noalign{\smallskip}
+Concepts & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 & 0.083 & 0.455 & 0.222 & 0.816 & 0.133 & 0.454 & 0.497 & 0.736 & 0.770 & 0.111 & 0.606\\
+FP\#2 & 0.262 & 0.963 & 0.284 & 0.293 & 0.424 & 0.243 & 0.945 & 0.521 & 0.562 & 0.098 & 0.612\\
+FP\#3 & 0.881 & 0.054 & 0.216 & 0.384 & 0.969 & 0.189 & 0.594 & 0.944 & 0.653 & 0.187 & 0.679\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Fixed-point attractor of the second example model ($\lambda = 1.4235$).}
+\label{tab:BP2Spartial14235-FPs}
+\begin{center}
+\begin{tabular}{llllllllllll}
+\hline\noalign{\smallskip}
+Concepts & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 & 0.934 & 0.995 & 0.510 & 0.965 & 0.998 & 0.929 & 0.968 & 0.866 & 0.997 & 0.993 & 0.755\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The next series of experiments were conducted with a bit modified connection matrices (see Tables~\ref{tab:BP2Spartial-V1connectionMtx} and \ref{tab:BP2Spartial-V2connectionMtx}) while keeping the steepness parameter value at a constant, $\lambda = 5$ level. These changes resulted in the number of fixed points being increased to 6 (see Table~\ref{tab:BP2SpartialV1-FPs}) and 7 (Table~\ref{tab:BP2SpartialV2-FPs}), respectively. It is an interesting fact that in neither case does the difference in the activation values of the concept C2.5 differentiate the fixed points from each other, as we saw in the previous series of experiments.
+
+\begin{table}
+\caption{Connection matrix of the 1\textsuperscript{st} model variant of the second example model.}
+\label{tab:BP2Spartial-V1connectionMtx}
+\begin{center}
+\begin{tabular}{l|lllllllllll}
+\hline\noalign{\smallskip}
+ & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+C1.2 & 0 & 0 & 0 & 0.5 & 0.75 & -0.25 & 0 & -0.5 & 1 & 0.25 & 0\\
+C2.4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+C2.5 & 0 & -0.5 & 0 & 0 & 0 & 0.25 & 0 & 0 & 0 & -0.5 & 0\\
+C3.1 & 0 & 0 & 0.75 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+C3.2 & -0.75 & -0.75 & 0 & -0.25 & 0 & 0 & 0 & -0.25 & 0 & 0 & 0\\
+C4.1 & 0 & 0 & 0 & 0.5 & 0 & 0 & 0 & -0.25 & 0 & 0 & -1\\
+C5.2 & 0 & -0.25 & 0 & -0.75 & 1 & -0.5 & 0 & -1 & 0 & 0.75 & 0\\
+C5.3 & 0 & 0 & 0 & 0 & 0.75 & -1 & 1 & 0 & 0.25 & 0 & 0\\
+C6.1 & 0 & 0.5 & 0 & 0 & -0.75 & 0 & -0.5 & 0.25 & 0 & -0.25 & 0\\
+C6.2 & 0 & 1 & 0 & 0 & 1 & 0 & 0.5 & 0 & -1 & 0 & -1\\
+C6.3 & 0 & 0 & 0 & 0.25 & 0 & 0 & 0 & 0 & 0.25 & 0 & 0\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Fixed-point attractors of the 1\textsuperscript{st} model variant of the second example model ($\lambda = 5$).}
+\label{tab:BP2SpartialV1-FPs}
+\begin{center}
+\begin{tabular}{llllllllllll}
+\hline\noalign{\smallskip}
+Concepts & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 & 0.03 & \textbf{0.86} & 1.00 & \textbf{0.86} & 1.00 & 0.97 & 1.00 & 0.00 & 0.01 & 1.00 & 0.00\\
+FP\#2 & 0.03 & \textbf{0.86} & 1.00 & \textbf{0.14} & 1.00 & 0.97 & 1.00 & 0.00 & 0.01 & 1.00 & 0.00\\
+FP\#3 & 0.03 & \textbf{0.15} & 1.00 & \textbf{0.14} & 1.00 & 0.97 & 1.00 & 0.00 & 0.01 & 1.00 & 0.00\\
+FP\#4 & 0.03 & \textbf{0.15} & 1.00 & \textbf{0.86} & 1.00 & 0.97 & 1.00 & 0.00 & 0.01 & 1.00 & 0.00\\
+FP\#5 & 0.03 & \textbf{0.86} & 1.00 & \textbf{0.50} & 1.00 & 0.97 & 1.00 & 0.00 & 0.01 & 1.00 & 0.00\\
+FP\#6 & 0.03 & \textbf{0.49} & 1.00 & \textbf{0.85} & 1.00 & 0.97 & 1.00 & 0.00 & 0.01 & 1.00 & 0.00\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Connection matrix of the 2\textsuperscript{nd} model variant of the second example model.}
+\label{tab:BP2Spartial-V2connectionMtx}
+\begin{center}
+\begin{tabular}{l|lllllllllll}
+\hline\noalign{\smallskip}
+ & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\hline\noalign{\smallskip}
+C1.2 & 0 & 0 & 0 & -0.25 & 0.25 & 0.75 & 0 & -0.25 & 0 & 0.5 & 0\\
+C2.4 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+C2.5 & 0 & -0.75 & 0 & 0 & 0 & -0.25 & 0 & 0 & 0 & 1 & 0\\
+C3.1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0\\
+C3.2 & 0.25 & 0.25 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0\\
+C4.1 & 0 & 0 & 0 & -1 & 0 & 0 & 0 & 1 & 0 & 0 & 0.25\\
+C5.2 & 0 & 0.5 & 0 & 0.75 & -1 & -0.25 & 0 & 0.25 & 0 & 0.75 & 0\\
+C5.3 & -1 & 0 & 0 & 0 & 1 & -0.25 & -1 & 0 & 1 & 0 & 0\\
+C6.1 & 0 & 0 & 0 & 0 & -0.25 & 0 & 0.5 & -0.5 & 0 & 0 & 0\\
+C6.2 & 0 & -0.25 & 0 & 0 & 0.5 & 0 & 0 & 0 & -0.25 & 0 & 0\\
+C6.3 & 0 & 0 & 0 & -0.75 & 0 & 0 & 0 & 0 & 0.5 & 0 & 0\\
+\noalign{\smallskip}\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{Fixed-point attractors of the 2\textsuperscript{nd} model variant of the second example model ($\lambda = 5$).}
+\label{tab:BP2SpartialV2-FPs}
+\begin{center}
+\begin{tabular}{llllllllllll}
+\hline\noalign{\smallskip}
+Concepts & C1.2 & C2.4 & C2.5 & C3.1 & C3.2 & C4.1 & C5.2 & C5.3 & C6.1 & C6.2 & C6.3\\
+\noalign{\smallskip}\svhline\noalign{\smallskip}
+FP\#1 & 0.03 & \textbf{0.96} & 1.00 & \textbf{1.00} & 1.00 & \textbf{0.04} & \textbf{0.86} & 1.00 & 1.00 & 1.00 & \textbf{0.99}\\
+FP\#2 & 0.03 & \textbf{0.04} & 1.00 & \textbf{1.00} & 1.00 & \textbf{0.12} & \textbf{0.15} & 1.00 & 1.00 & 1.00 & \textbf{0.99}\\
+FP\#3 & 0.03 & \textbf{0.04} & 1.00 & \textbf{0.90} & 1.00 & \textbf{0.82} & \textbf{0.14} & 1.00 & 1.00 & 1.00 & \textbf{1.00}\\
+FP\#4 & 0.03 & \textbf{0.04} & 1.00 & \textbf{0.27} & 1.00 & \textbf{0.82} & \textbf{0.14} & 1.00 & 1.00 & 1.00 & \textbf{1.00}\\
+FP\#5 & 0.03 & \textbf{0.85} & 1.00 & \textbf{1.00} & 1.00 & \textbf{0.06} & \textbf{0.50} & 1.00 & 1.00 & 1.00 & \textbf{0.99}\\
+FP\#6 & 0.03 & \textbf{0.50} & 1.00 & \textbf{1.00} & 1.00 & \textbf{0.06} & \textbf{0.49} & 1.00 & 1.00 & 1.00 & \textbf{0.99}\\
+FP\#7 & 0.03 & \textbf{0.15} & 1.00 & \textbf{1.00} & 1.00 & \textbf{0.06} & \textbf{0.50} & 1.00 & 1.00 & 1.00 & \textbf{0.99}\\
 \noalign{\smallskip}\hline
 \end{tabular}
 \end{center}
