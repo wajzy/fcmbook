@@ -55,18 +55,29 @@ Hungary \email{miklos.hatwagner@sze.hu}}
 %
 \maketitle
 
-\newcommand{\behaviorAbstract}{Fuzzy Cognitive Maps are widely used in decision making. If 
-historical time series data is available, the preferred way of model 
-creation is based on machine learning. Sometimes such data in 
-unavailable, however, and only experts can define the model. These 
-models unavoidably contain more or less subjective elements, but 
-even if the models are created by machine learning, their thorough 
-investigation is recommended before usage. Sometimes a subtle 
-modification of connection weights or a different $\lambda$ parameter 
-in the threshold function can result in a model that behaves 
-significatly different. This chapter describes a method to 
-automatically investigate a model and detect if some of its components 
-affect its dynamic hahavior significantly.}
+\newcommand{\behaviorAbstract}{
+In this Chapter, we will discuss two further case studies, namely, 
+problems that were proposed by a French bank. Our team was involved by 
+the request of a French university, and we started to collaborate with 
+their respective team, experts in management topics. The bank put up 
+several models, but unfortunately the real-world equivalent of most 
+models, the modeled system, remained unknown to us because of trade 
+secrets. This made it difficult or impossible to determine the 
+correctness of the models and fine-tune their settings in order to make 
+their behavior more similar to reality. There was only one exception 
+regarding the management system of the bank. The concepts of it were 
+identified by themselves and the French specialist team, and experts 
+have estimated the mutual influence strengths and directions of these 
+components on each other. Models created this way unavoidably contain 
+more or less subjective elements, but even if the models had been 
+produced by machine learning, their thorough investigation is 
+recommended before usage. Sometimes a subtle modification of connection 
+weights or a different $\lambda$ parameter in the threshold function 
+can result in a model that behaves significatly different. This chapter 
+describes a method to automatically investigate a model and detect if 
+some of its components affect its dynamic behavior significantly. Two 
+models were selected from those developed by the bank to illustrate the 
+method and the results obtained with it.}
 
 \abstract*{\behaviorAbstract}
 
@@ -75,71 +86,73 @@ affect its dynamic hahavior significantly.}
 \section{Introduction}
 \label{sec:intro}
 
-Decision support systems and methods are at the center of 
-researcher's attention for a long time \cite{busemeyer1999dynamic}, 
-because prudent decision making can be really hard in practice, 
-especially if the effect of many related factors with continuously 
-changing states have to be taken into account, and a wrong 
-intervention may cause serious personal injury or damage to property.
+A few years ago, a bank visited our research team to analyze the FCMs 
+they made. The models were related to the organizational structure and 
+operation of their institution, but they did not disclose further 
+details because of trade secrets. Thus, it was impossible to know 
+exactly which processes of which organizational unit were modeled, what 
+the meaning of each concept and edge was. Therefore we were not able to 
+verify the correctness of the modeling process and the model itself, 
+but we could perform various analyzes with the models. First, 
+the static properties of models were summarized (e.g. connection matrix 
+density, importance of concepts, cycles were detected 
+in the connection matrix) and then different 
+scenarios were examined, i.e. simulations were started from different 
+initial states, and it was observed whether in these cases the system 
+converges to a stable state (fixed point, FP), a limit cycle (LC) or a 
+chaotic behavior (CB) occurs. (Some FPs should be achieved, others 
+avoid according to the needs of stakeholders. LCs and CB are usually 
+undesirable in decision making tasks.) We also examined whether the 
+different scenarios always lead to the same fixed point. If not, we 
+examined the number of fixed points and which cases lead to each fixed 
+point, and in what proportion.
 
-Chapter 1 gives an overview of Fuzzy Cognitive Maps (FCMs) \cite{b.kosko1986}, but it worth summarize the most important properties of FCMs again. FCM can be one of the possible tools of a decision-maker \cite{papageorgiou2013fuzzy}. 
-It is a bipolar fuzzy graph that is made of nodes interconnected by directed, weighted edges. The various factors, variables of a 
-complex system can be described by the nodes (also called \emph
-{concepts}) and the strength of causal relations among them can be 
-expressed by edges. Even if an FCM model can characterize the 
-studied system only qualitatively \cite{j.l.salmeron2009}, this 
-method is easy to use and provides a transparent, clear description 
-of it. Modeling capabilities and simulations that reveal the dynamic 
-behavior of the system made FCM an inevitable opportunity in 
-decision support.
+After answering these questions, another question arose: how reliable 
+are the results of our analysis? If the expert who created the models 
+e.g. neglected otherwise significant factors (not representing them 
+with concepts) or inaccurately estimated the strength of the 
+relationships between concepts, that may affect the outcome of 
+simulations and lead to erroneous decisions later on. If the model was 
+created by a single expert the model unavoidably includes his/her 
+beliefs and subjectivity. The danger of this is less if a group of 
+experts worked out the model instead of a sole expert 
+\cite{kosko1988hidden,groumpos2010fuzzy}, but the result still contains 
+some uncertainty for sure. According to our experiences they can agree 
+relatively quickly and easily on the number of concepts, the existence 
+and sign of relationships, but the magnitude of those relationships are 
+much harder to define, especially if an order of importance or strength 
+exists among them. The number of relationships is a quadratic function 
+of the number of concepts, therefore even if the modelers followed 
+Kosko's advice and they did not include self-loops in the FCM, in case 
+of a small model containing only 10 concepts the number of 
+relationships can be up to 90. It will be really hard to define so many 
+weights properly and worse is that the steepness parameter $\lambda$ of 
+the threshold function does not have any connection with real objects, 
+but its value may strongly influence the results of simulations (number 
+and values of FPs, LCs and CB).
 
-There are two main ways of model creation \cite{papageorgiou2012learning}:
-\begin{enumerate}
-  \item an expert, or a group of experts can give the description of 
-  the system, or
-  \item based on a long time-series database a suitable machine 
-  learning technique may generate the model with more or less support 
-  of experts.
-\end{enumerate}
+Because of the inherent subjectivity and uncertainty machine learning 
+is the preferred way of modeling in most cases. In those cases it can be 
+applied the concepts are still defined by experts, however, and/or the 
+nature of time series data. In our case such data was not available 
+thus the models were developed by one or more experts.
 
-In the first case the expert who makes the model unavoidably 
-includes his/her beliefs and subjectivity in the map. This can be 
-decreased if a group of experts works out the model instead of a 
-sole expert \cite{kosko1988hidden,groumpos2010fuzzy}, but the result 
-will contain some uncertainty for sure. They can agree relatively 
-quickly and easily on the number of concepts, the existence and sign 
-of relationships, but the magnitude of those relationships are much 
-harder to define, especially if an order of importance or strength 
-exists among them. The number of relationships is a quadratic 
-function of the number of concepts, therefore even if the modelers 
-follow Kosko's advice and they do not include self-loops in the FCM, 
-in case of a small model containing only 10 concepts the number of 
-relationships can be up to 90. It will be really hard to define so 
-many weights properly and worse is that the steepness parameter 
-$\lambda$ of the threshold function does not have any connection 
-with real objects, but its value may strongly influence the results 
-of simulations (number and values of fixed points (FPs), limit cycles 
-(LSs), chaotic behavior (CB)). FPs represent the stable states of a system and some of them should be achieved, others avoid according to the needs of stakeholders. LCs and CB are usually undesirable in decision making tasks.
-
-Because of the inherent subjectivity and uncertainty the second method, based on machine learning is preferred 
-in most cases of modeling. In those cases it can be applied the concepts 
-are still defined by experts, however, and/or the nature of time series data. 
-Sometimes such data is not available and only the first method 
-remains.
-
-Another possible scenario is when the model is created by the reduction of a bigger initial model (see Chapter 6). The reduction may cause smaller or larger behavioral changes according to the degree of reduction, eg. the number of fixed-point attractors can be different.
+In general, a deep analysis can also be useful if the model is created 
+by the reduction of a bigger initial model (see Chapter 6). The 
+reduction may cause smaller or larger behavioral changes according to 
+the degree of reduction, eg. the number of fixed-point attractors can 
+be different.
 
 No matter how the model is made, it worth investigating the effect 
 of small modifications of connection weights or steepness parameter 
 on model behavior. The sensitive points of the model can be revealed 
 and experts can discuss about the possibilities on making the model 
-more stable and reliable. Unfortunately it cannot be made by hand, 
-following a trial and error approach. In an FCM the connection 
+more stable and reliable. In an FCM the connection 
 weights are specified by real numbers, thus the number of possible 
 modified weights are practically infinite. With a reasonable 
 compromise we can say that the weights to try can be limited to the 
 number of used linguistic variables, eg. 5: -1, -0.5, 0, 0.5 and 1. 
-In the already mentioned model containing only 10 concepts, where 
+In the already mentioned, imagined model containing only 10 concepts, where 
 even 90 relationships may exist, the number of model versions may up 
 to $5^{90} = 8,078\times10^{62}$. Obviously the experts are primarily 
 interested only in the effect of slight modifications, thus they 
